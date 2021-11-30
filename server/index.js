@@ -54,7 +54,7 @@ app.post('/api/upload', async (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-    User.findOne({ username: req.body.username }, async (err, doc) => {
+    User.findOne({ email: req.body.email }, async (err, doc) => {
       if (err) throw err;
       if (doc) res.send("User Already Exists");
       if (!doc) {
@@ -63,7 +63,6 @@ app.post("/register", (req, res) => {
         const newUser = new User({
           firstName: req.body.firstName,
           lastName: req.body.lastName,
-          username: req.body.username,
           email: req.body.email,
           password: hashedPassword,
         });

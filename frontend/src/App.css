@@ -1,0 +1,125 @@
+.navbar-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+}
+
+.logo-banner {
+  display: flex;
+  flex-direction: row;
+  margin: 5px;
+}
+
+.navbar-title {
+  font-family: "Butterfly Kids", cursive;
+  color: white;
+}
+
+h1 {
+  margin: 0.5em;
+}
+
+/*Add Family and Friends Page*/
+
+.add-family {
+  margin-left: 10vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 80vw;
+}
+
+#friends-family-header {
+  color: #616161;
+}
+
+/*Popover Css*/
+
+#popover-card {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+}
+
+/*Calendar Css*/
+.calendar-day {
+  width: 12vw;
+  height: 12vw;
+  border-radius: 3px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
+    rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+}
+
+.calendar-day:active {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px,
+    rgba(0, 0, 0, 0.3) 0px 18px 36px -18px;
+}
+.calendar-day:hover {
+  cursor: pointer;
+}
+.calendar-header {
+  font-size: 30px;
+  text-align: center;
+}
+
+.calendar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+table {
+  border-spacing: 10px 10px;
+}
+
+@media (max-width: 400px) {
+  .calendar-day {
+    width: 14vw;
+    height: 14vw;
+  }
+  .calendar-header {
+    font-size: 20px;
+  }
+  table {
+    border-spacing: 5px 5px;
+  }
+}
+
+/*Registration Form CSS*/
+.form-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80vw;
+  max-width: 450px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #90be6d;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+#register-title {
+  margin: 20px;
+}
+.registration-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+}
+
+.alert {
+  background-color: #cc3300;
+  border-radius: 5px;
+  color: white;
+  width: 90%;
+  padding: 5px;
+}
+
+.hidden {
+  display: none;
+}
