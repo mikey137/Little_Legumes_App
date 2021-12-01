@@ -98,9 +98,10 @@ export default function Register(){
             firstName: registerFirstName,
             lastName: registerLastName,
             password: registerPassword,
-            email: registerEmail
+            email: registerEmail,
+            username: registerEmail
           },
-          withCredentials: false,
+          withCredentials: true,
           url: "http://localhost:3001/register"
         }).then((res) => {
             console.log(res)

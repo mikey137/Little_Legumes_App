@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -9,25 +9,56 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { colorTheme } from '../../ThemeContext';
 import Navbar from '../navbar';
+import axios from 'axios'
 
 
 export default function AddFAndFForm(){
+    const [firstName, setFirstName] = useState("")
+    const [lastName, setLastName] = useState("")
+    const [relationship, setRelationship] = useState("")
+    const [email, setEmail] = useState("")
+    const [connectedUser, setConnectedUser] = useState()
+
+    useEffect(() => {
+        const loggedInUser = localStorage.getItem("user");
+        if (loggedInUser) {
+          const foundUser = JSON.parse(loggedInUser);
+          setConnectedUser(foundUser.username);
+        }
+    }, []);
+
+    const addFamilyMember = () => {
+        axios({
+          method: "POST",
+          data: {
+            firstName: firstName,
+            lastName: lastName,
+            relationship: relationship,
+            email: email,
+            connectedUser: connectedUser
+          },
+          withCredentials: true,
+          url: "http://localhost:3001/addFamilyMember",
+        }).then((res) => {
+          console.log(res) 
+        });
+    };
 
     return(
         <ThemeProvider theme={colorTheme}>
             <Navbar />
             <div className="add-family">
                 <h2 id="friends-family-header">Add family and friends</h2>
-                <TextField sx={{ m:2, bgcolor: 'white', width: '90%' }} id="outlined-basic" label="First Name" variant="outlined" />
-                <TextField sx={{ m:2, bgcolor: 'white', width: '90%'  }} id="outlined-basic" label="Last Name" variant="outlined" />
+                <TextField onChange={(e) => setFirstName(e.target.value)} sx={{ m:2, bgcolor: 'white', width: '90%' }} id="outlined-basic" label="First Name" variant="outlined" />
+                <TextField onChange={(e) => setLastName(e.target.value)} sx={{ m:2, bgcolor: 'white', width: '90%'  }} id="outlined-basic" label="Last Name" variant="outlined" />
                 <FormControl sx={{ m:2, bgcolor: 'white', width: '90%' }}>
                     <InputLabel id="demo-simple-select-label">relationship to child</InputLabel>
                     <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={''}
-                    label="Age"
-                    onChange={''}
+                    value={relationship}
+                    label="Relationship to Child"
+                    onChange={(e) => setRelationship(e.target.value)}
                     >
                     <MenuItem value={'mother'}>Mother</MenuItem>
                     <MenuItem value={'father'}>Father</MenuItem>
@@ -39,9 +70,9 @@ export default function AddFAndFForm(){
                     <MenuItem value={'other'}>Other</MenuItem>
                     </Select>
                 </FormControl>
-                <TextField sx={{ m:2, bgcolor: 'white', width: '90%'  }} id="outlined-basic" label="Email" variant="outlined" />
+                <TextField onChange={(e) => setEmail(e.target.value)} sx={{ m:2, bgcolor: 'white', width: '90%'  }} id="outlined-basic" label="Email" variant="outlined" />
                 <Stack sx={{m:2}}spacing={2} direction="column" justifyContent="center" width="300px">
-                    <Button color ="secondary" variant="contained">Add Person</Button>
+                    <Button onClick={addFamilyMember} color ="secondary" variant="contained">Add Person</Button>
                     <Button color = "info" variant="contained">Cancel</Button>
                 </Stack>
             </div>

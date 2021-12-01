@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSeedling } from '@fortawesome/free-solid-svg-icons'
 import { styled, useTheme, ThemeProvider } from '@mui/material/styles';
@@ -67,7 +67,16 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function Navbar() {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [user, setUser] = useState()
+
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem("user");
+    if (loggedInUser) {
+      const foundUser = JSON.parse(loggedInUser);
+      setUser(foundUser);
+    }
+  }, []);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -80,53 +89,53 @@ export default function Navbar() {
   return (
     <ThemeProvider theme={colorTheme}>
         <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
-            <AppBar position="fixed" open={open}>
-                <Toolbar>
-                    <Typography variant="h6" noWrap sx={{ flexGrow: 1, display: 'flex', flexDirection: 'row', justifyContent: 'start' }} component="div">
-                        <FontAwesomeIcon icon={faSeedling} size="3x" inverse />
-                        <h3 className="navbar-title">Little Legumes</h3>
-                    </Typography>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        edge="end"
-                        onClick={handleDrawerOpen}
-                        sx={{ ...(open && { display: 'none' }) }}
-                    >
-                        <MenuIcon/>
-                    </IconButton>
-                </Toolbar>
-            </AppBar>
-            <Main open={open}>
-                <DrawerHeader />
-            </Main>
-            <Drawer
-                sx={{
+          <CssBaseline />
+          <AppBar position="fixed" open={open}>
+            <Toolbar>
+              <Typography variant="h6" noWrap sx={{ flexGrow: 1, display: 'flex', flexDirection: 'row', justifyContent: 'start' }} component="div">
+                <FontAwesomeIcon icon={faSeedling} size="3x" inverse />
+                <h3 className="navbar-title">Little Legumes </h3>
+              </Typography>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="end"
+                onClick={handleDrawerOpen}
+                sx={{ ...(open && { display: 'none' }) }}
+              >
+                <MenuIcon/>
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+          <Main open={open}>
+            <DrawerHeader />
+          </Main>
+          <Drawer
+            sx={{
+            width: drawerWidth,
+            flexShrink: 0,
+            '& .MuiDrawer-paper': {
                 width: drawerWidth,
-                flexShrink: 0,
-                '& .MuiDrawer-paper': {
-                    width: drawerWidth,
-                },
-                }}
-                variant="persistent"
-                anchor="right"
-                open={open}
-            >
-                <DrawerHeader>
-                    <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                    </IconButton>
-                </DrawerHeader>
-                <Divider />
-                <List>
-                {['Add Moment','View Friends and Family', 'Add Friends and Family', 'Logout'].map((text, index) => (
-                    <ListItem button key={text}>
-                    <ListItemText primary={text} />
-                    </ListItem>
-                ))}
-                </List>
-            </Drawer>
+            },
+            }}
+            variant="persistent"
+            anchor="right"
+            open={open}
+          >
+            <DrawerHeader>
+              <IconButton onClick={handleDrawerClose}>
+                {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+              </IconButton>
+            </DrawerHeader>
+            <Divider />
+            <List>
+            {['Add Moment','View Friends and Family', 'Add Friends and Family', 'Logout'].map((text, index) => (
+              <ListItem button key={text}>
+              <ListItemText primary={text} />
+              </ListItem>
+            ))}
+            </List>
+          </Drawer>
         </Box>
     </ThemeProvider>
   );

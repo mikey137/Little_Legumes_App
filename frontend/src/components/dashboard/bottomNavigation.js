@@ -18,6 +18,9 @@ export default function BottomNavbar(){
     const [state, setState] = useState({
         bottom: false
     })
+    const handleLogout = () => {
+        localStorage.clear()
+    }
 
     const toggleDrawer = (anchor, open) => (event) => {
         if (
@@ -67,12 +70,11 @@ export default function BottomNavbar(){
                         anchor={'bottom'}
                         open={state['bottom']}
                         onClose={toggleDrawer('bottom', false)}
-                        onOpen={toggleDrawer('bottom', true)}
-                        
+                        onOpen={toggleDrawer('bottom', true)}   
                     >
                         {drawerContent('bottom')}
                     </SwipeableDrawer>  
-                    <BottomNavigationAction label="Logout" icon={<LogoutIcon/>} />
+                    <BottomNavigationAction onClick={handleLogout}label="Logout" icon={<LogoutIcon/>} />
                 </BottomNavigation>
             </Paper>
     )
