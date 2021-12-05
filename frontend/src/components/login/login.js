@@ -56,7 +56,6 @@ export default function Login(){
   };
 
   const getUser = () => {
-    console.log('test')
     axios({
       method: "GET",
       withCredentials: true,

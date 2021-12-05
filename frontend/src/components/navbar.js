@@ -17,6 +17,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import { colorTheme } from '../ThemeContext';
+import { Navigate } from 'react-router-dom'
 
 const drawerWidth = 240;
 
@@ -68,13 +69,16 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export default function Navbar() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const [user, setUser] = useState()
+  const [userInfo, setUserInfo] = useState("")
+  const [isLoggedIn, setIsLoggedIn] = useState(true)
 
   useEffect(() => {
     const loggedInUser = localStorage.getItem("user");
     if (loggedInUser) {
       const foundUser = JSON.parse(loggedInUser);
-      setUser(foundUser);
+      setUserInfo(foundUser);
+    }else{
+      setIsLoggedIn(false)
     }
   }, []);
 
@@ -86,6 +90,10 @@ export default function Navbar() {
     setOpen(false);
   };
 
+  if(!isLoggedIn){
+    return <Navigate replace to="/" />
+}
+
   return (
     <ThemeProvider theme={colorTheme}>
         <Box sx={{ display: 'flex' }}>
@@ -95,6 +103,9 @@ export default function Navbar() {
               <Typography variant="h6" noWrap sx={{ flexGrow: 1, display: 'flex', flexDirection: 'row', justifyContent: 'start' }} component="div">
                 <FontAwesomeIcon icon={faSeedling} size="3x" inverse />
                 <h3 className="navbar-title">Little Legumes </h3>
+              </Typography>
+              <Typography variant="h6" noWrap sx={{ flexGrow: 1, display: 'flex', flexDirection: 'row', justifyContent: 'start' }} component="div">
+                Hello {userInfo.firstName}
               </Typography>
               <IconButton
                 color="inherit"

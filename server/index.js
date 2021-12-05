@@ -9,6 +9,7 @@ const session = require('express-session')
 const MongoStore = require('connect-mongo')
 const User = require('./models/User')
 const FamilyMember = require('./models/FamilyMember')
+const Photo = require('./models/Photo')
 
 mongoose.connect(
     "mongodb+srv://mhulme:SThendy137!@cluster0.aq0gb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
@@ -39,7 +40,10 @@ app.use(
 )
 const {passport} = require("./utils/passportConfig");
 app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.session({
+    secret: "thisismysecretkey",
+    saveUninitialized: true,
+}));
 
 app.post("/login", (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
@@ -54,10 +58,6 @@ app.post("/login", (req, res, next) => {
       }
     })(req, res, next);
 });
-
-app.get('/api', (req,res) => {
-    res.json({message: "Hello from server!"})
-})
 
 app.post('/api/upload', async (req, res) => {
     try {
@@ -93,7 +93,7 @@ app.post("/register", (req, res) => {
 app.post("/addFamilyMember", (req, res) => {
     FamilyMember.findOne({ email: req.body.email }, async (err, doc) => {
         if(err) throw err
-        if(doc) res.send("User Already Exists")
+        if(doc) res.send("Family Member Already Exists")
         if(!doc) {
             const newFamilyMember = new FamilyMember({
                 firstName: req.body.firstName,
@@ -106,6 +106,24 @@ app.post("/addFamilyMember", (req, res) => {
             res.send("New Family Member Added")
         }
     })
+})
+
+app.post("/addphoto", (req, res) => {
+    Photo.findOne({ url: req.body.url }, async (err, photo) => {
+        if(err) throw err
+        if(photo) res.send("Photo Already Exists")
+        if(!photo) {
+            const newPhoto = new Photo({
+                user: req.body.user,
+                dateId: req.body.dateId,
+                momentCaption: req.body.momentCaption,
+                thumbnailUrl: req.body.thumbnailUrl,
+                url: req.body.url
+            })
+            await newPhoto.save()
+            res.send("Photo Added")
+        }
+    }) 
 })
 
 app.get("/user", (req, res) => {
@@ -121,6 +139,18 @@ app.get("/user", (req, res) => {
         }
     })
 });
+
+app.get("/photos", (req, res) => {
+    Photo.find({user: req.user.username}, (err, photos) => {
+        if(err) throw err
+        if(photos) res.send({
+            photos
+        })
+        else{
+            res.status(400).send("no photos found")
+        }
+    })
+})
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`)

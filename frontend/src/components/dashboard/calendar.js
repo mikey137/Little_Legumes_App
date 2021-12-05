@@ -1,14 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import moment from 'moment'
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
-import UploadPhotoWidget from '../uploads'
 import Button from '@mui/material/Button';
 import InfiniteScroll from "react-infinite-scroll-component"
-
-
+import axios from 'axios'
+import { v4 as uuid } from 'uuid'
 
 const style = {
   position: 'absolute',
@@ -28,9 +27,61 @@ const style = {
 
 export default function Calendar(){
   const [months, setMonths] = useState([moment().format("MMMM YYYY"),moment().add(-1,'M').format("MMMM YYYY"), moment().add(-2,'M').format("MMMM YYYY") ])
-  const [isModalOpen, setIsModalOpen] = useState(false);  
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [dateId, setDateId] = useState("")
+  const [momentCaption, setMomentCaption] = useState("")
+  const [loggedInUser, setLoggedInUser] = useState("")
+  const [photoThumbnailUrl, setPhotoThumbnailUrl] = useState("")
+  const [photoUrl, setPhotoUrl] = useState("")
+  const [userPhotos, setUserPhotos] = useState([])
 
-  const handleOpenModal = () => setIsModalOpen(true);
+  const unique_id = uuid()
+
+  const getPhotos = () => {
+    axios({
+      method: "GET",
+      withCredentials: true,
+      url: "http://localhost:3001/photos",
+    }).then((res) => {
+      const photos = res.data.photos
+      setUserPhotos(photos)
+      console.log('Got the Photos')
+      console.log(res)
+    });
+  };
+
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem("user");
+    if (loggedInUser) {
+      const foundUser = JSON.parse(loggedInUser);
+      setLoggedInUser(foundUser.username);
+    }
+    getPhotos()
+    /*mapPhotosToDates()*/
+  }, [])
+
+  const addPhoto = () => {
+    axios({
+      method: "POST",
+      data: {
+        user: loggedInUser,
+        dateId: dateId,
+        momentCaption: momentCaption,
+        thumbnailUrl: photoThumbnailUrl,
+        url: photoUrl
+      },
+      withCredentials: true,
+      url: "http://localhost:3001/addphoto",
+    }).then((res) => {
+      console.log(res) 
+    });
+};
+
+  const handleOpenModal = (e) => {
+    setIsModalOpen(true);
+    setDateId(e.target.id)
+  }
+
   const handleCloseModal = () => setIsModalOpen(false);
   
   const addMoreMonths = () => {
@@ -50,13 +101,30 @@ export default function Calendar(){
     return blanks
   }
 
-  const fillDaysInMonth = () => {
+
+  const fillDaysInMonth = (month) => {
     let daysInMonth = []
     for(let d = 1; d <= daysInThisMonth; d++){
-      daysInMonth.push(<td onClick={handleOpenModal} key={d} className={"calendar-day"}>{d}</td>)
+      daysInMonth.push(<td 
+          onClick={handleOpenModal} 
+          key={month + d} 
+          id={d} 
+          className={"calendar-day"}
+        >
+          {d}
+        </td>
+      )
     }
     return daysInMonth
   }
+
+  /*const mapPhotosToDates = () => {
+    for(let i = 0; i < userPhotos.length; i++){
+      let id = i.dateId
+      let thumbnail = i.thumbnailUrl
+      document.getElementById(id).style.backgroundImage = `url(${thumbnail})`
+    }
+  }*/
 
     
   function createGridFromSlots(totalSlots){
@@ -75,15 +143,28 @@ export default function Calendar(){
       }
     });
     const completedCalendarGrid = rows.map((d,i) => {
-      return <tr>{d}</tr>
+      return <tr id='test'>{d}</tr>
     })
     return completedCalendarGrid
   }
+
+  const myWidget = window.cloudinary.createUploadWidget({
+    cloudName: 'nimbus137', 
+    uploadPreset: 'k0l0cx3a'},
+    (error, result) => { 
+      if (!error && result && result.event === "success") { 
+        console.log('Done! Here is the image info: ', result.info);
+        setPhotoUrl(result.info.url)
+        setPhotoThumbnailUrl(result.info.thumbnail_url)
+      }
+    }
+  )
     
   const blanks = findNumberOfBlanks()
   const daysInMonth = fillDaysInMonth()
   const totalSlots = blanks.concat(daysInMonth)
   const completedCalendarGrid = createGridFromSlots(totalSlots)
+   
 
   return(
     <InfiniteScroll
@@ -111,13 +192,30 @@ export default function Calendar(){
               Add Moment
             </Typography>
             <TextField
+              onChange={(e) => {setMomentCaption(e.target.vaule)}}
               sx={{m: 3, width: '90%'}}
               id="outlined-multiline-static"
               label="Caption"
               multiline
               rows={4}
             /> 
-            <Button sx={{m: 3, width: '75%'}} variant="contained" color="secondary">Submit</Button>
+            <Button 
+              onClick={() => {myWidget.open()}} 
+              sx={{m: 1, width: '75%', maxWidth: '250px'}} 
+              variant="contained" 
+              id="upload_widget" 
+              className="cloudinary-button"
+            >
+              Upload Photo
+            </Button>
+            <Button 
+              onClick={addPhoto} 
+              sx={{m: 3, width: '75%'}} 
+              variant="contained" 
+              color="secondary"
+            >
+              Submit
+            </Button>
           </Box>
         </Modal>
       </div>
