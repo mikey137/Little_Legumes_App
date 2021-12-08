@@ -5,6 +5,7 @@ import Login from './components/login/login';
 import Register from './components/forms/register';
 import Dashboard from './components/dashboard/dashboard';
 import AddFAndFForm from './components/forms/addfriendsandfamily';
+import ViewFamily from './components/vewFamily'
 import './App.css'
 import UploadPhotoWidget from './components/uploads';
 
@@ -17,6 +18,7 @@ function App() {
           <Route path="/Dashboard" element={<Dashboard />} />
           <Route path="/AddFamily" element={<AddFAndFForm />} />
           <Route path="/upload" element={<UploadPhotoWidget />} />
+          <Route path="/family" element={<ViewFamily />} />
         </Routes>
       </BrowserRouter>  
   );

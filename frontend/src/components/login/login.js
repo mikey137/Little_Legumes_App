@@ -8,6 +8,7 @@ import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSeedling } from '@fortawesome/free-solid-svg-icons'
 import Link from '@mui/material/Link';
@@ -20,6 +21,7 @@ export default function Login(){
   const [loginEmail, setLoginEmail] = useState("")
   const [loginPassword, setLoginPassword] = useState("")
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isNoUserAlertOpen, setIsNoUserAlertOpen] = useState(false)
   const [values, setValues] = useState({
       password: '',
       showPassword: false,
@@ -51,7 +53,14 @@ export default function Login(){
       url: "http://localhost:3001/login",
     }).then((res) => {
       console.log(res)
-      
+      if(res.data === 'Successfully Authenticated'){
+        console.log('logged in')
+       
+        getUser()
+      }  
+      if(res.data === "No User Exists"){
+        setIsNoUserAlertOpen(true)
+      }
     });
   };
 
@@ -59,10 +68,12 @@ export default function Login(){
     axios({
       method: "GET",
       withCredentials: true,
-      url: "http://localhost:3001/user",
+      url: `http://localhost:3001/user`,
     }).then((res) => {
+      console.log('got user info')
       localStorage.setItem('user', JSON.stringify(res.data))
       setIsLoggedIn(true)
+      
     });
   };
 
@@ -101,8 +112,12 @@ export default function Login(){
                           label="Password"
                       />
                   </FormControl>
-                  <Link onClick={() => {login(); getUser()}}><Button sx={{ m: 1, width: '25ch' }} variant="contained">Login</Button></Link>
+                  <Button onClick={login} sx={{ m: 1, width: '25ch' }} variant="contained">Login</Button>
                   <Link href="/register"><Button sx={{ m: 1, width: '25ch', bgcolor: "white" }} variant="outlined">Sign Up</Button></Link>
+                  <div className={isNoUserAlertOpen ? 'show' : 'hidden'}>
+                    <Alert sx={{ m: 1}} variant= "filled" severity="error">Sorry, please try a different email or password</Alert>
+                  </div>
+                  
               </div>
           </div>
       </div>

@@ -59,6 +59,11 @@ app.post("/login", (req, res, next) => {
     })(req, res, next);
 });
 
+app.get('/logout', function(req, res){
+    req.logout();
+    res.send("Logged Out")
+  });
+
 app.post('/api/upload', async (req, res) => {
     try {
         const fileStr = req.body.data;
@@ -127,6 +132,7 @@ app.post("/addphoto", (req, res) => {
 })
 
 app.get("/user", (req, res) => {
+    console.log(req)
     User.findOne({username: req.user.username}, (err, user) => {
         if(err) throw err
         if(user) res.send({
@@ -148,6 +154,18 @@ app.get("/photos", (req, res) => {
         })
         else{
             res.status(400).send("no photos found")
+        }
+    })
+})
+
+app.get("/familymembers", (req, res) => {
+    FamilyMember.find({connectedUser: req.user.username}, (err, family) => {
+        if(err) throw err
+        if(family) res.send({
+            family
+        })
+        else{
+            res.status(400).send("no family found")
         }
     })
 })

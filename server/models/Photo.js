@@ -6,7 +6,7 @@ const PhotoSchema = new mongoose.Schema({
         required: true
     },
     dateId:{
-        type: Date,
+        type: String,
         required: true
     },
     momentCaption: {

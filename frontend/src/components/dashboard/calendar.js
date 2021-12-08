@@ -7,7 +7,6 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import InfiniteScroll from "react-infinite-scroll-component"
 import axios from 'axios'
-import { v4 as uuid } from 'uuid'
 
 const style = {
   position: 'absolute',
@@ -35,8 +34,6 @@ export default function Calendar(){
   const [photoUrl, setPhotoUrl] = useState("")
   const [userPhotos, setUserPhotos] = useState([])
 
-  const unique_id = uuid()
-
   const getPhotos = () => {
     axios({
       method: "GET",
@@ -49,16 +46,6 @@ export default function Calendar(){
       console.log(res)
     });
   };
-
-  useEffect(() => {
-    const loggedInUser = localStorage.getItem("user");
-    if (loggedInUser) {
-      const foundUser = JSON.parse(loggedInUser);
-      setLoggedInUser(foundUser.username);
-    }
-    getPhotos()
-    /*mapPhotosToDates()*/
-  }, [])
 
   const addPhoto = () => {
     axios({
@@ -75,8 +62,32 @@ export default function Calendar(){
     }).then((res) => {
       console.log(res) 
     });
+    getPhotos()
 };
 
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem("user");
+    if (loggedInUser) {
+      const foundUser = JSON.parse(loggedInUser);
+      setLoggedInUser(foundUser.username);
+    }
+    getPhotos()
+  }, [])
+
+  const mapPhotosToDates = () => {
+    console.log('test')
+    for(let i = 0; i < userPhotos.length; i++){
+      let photo = userPhotos[i]
+      let id = photo.dateId
+      let thumbnail = photo.url
+      document.getElementById(id).style.backgroundImage = `url(${thumbnail})`
+    }
+  }
+
+  useEffect(() => {
+    mapPhotosToDates()
+  },[userPhotos])
+ 
   const handleOpenModal = (e) => {
     setIsModalOpen(true);
     setDateId(e.target.id)
@@ -92,42 +103,25 @@ export default function Calendar(){
     
   let daysInThisMonth = moment().daysInMonth()
   let firstDayOfMonth = moment().startOf('month').format('d')
-  
-  const findNumberOfBlanks = () => {
+    
+  function completedCalendarGrid(m){
     let blanks = []
     for (let i = 0; i < firstDayOfMonth; i++) {
       blanks.push(<td className="calendar-day">{""}</td>);
     }
-    return blanks
-  }
-
-
-  const fillDaysInMonth = (month) => {
     let daysInMonth = []
     for(let d = 1; d <= daysInThisMonth; d++){
       daysInMonth.push(<td 
           onClick={handleOpenModal} 
-          key={month + d} 
-          id={d} 
+          key={d} 
+          id={`${m}+${d}`} 
           className={"calendar-day"}
         >
           {d}
         </td>
       )
     }
-    return daysInMonth
-  }
-
-  /*const mapPhotosToDates = () => {
-    for(let i = 0; i < userPhotos.length; i++){
-      let id = i.dateId
-      let thumbnail = i.thumbnailUrl
-      document.getElementById(id).style.backgroundImage = `url(${thumbnail})`
-    }
-  }*/
-
-    
-  function createGridFromSlots(totalSlots){
+    let totalSlots = blanks.concat(daysInMonth)
     let rows = []
     let cells = []
     totalSlots.forEach((row, i) => {
@@ -159,12 +153,6 @@ export default function Calendar(){
       }
     }
   )
-    
-  const blanks = findNumberOfBlanks()
-  const daysInMonth = fillDaysInMonth()
-  const totalSlots = blanks.concat(daysInMonth)
-  const completedCalendarGrid = createGridFromSlots(totalSlots)
-   
 
   return(
     <InfiniteScroll
@@ -178,7 +166,7 @@ export default function Calendar(){
         <div className="calendar-header">{month}</div>
         <div className="calendar-body">
           <table>
-            <tbody>{completedCalendarGrid}</tbody>
+            <tbody>{completedCalendarGrid(month)}</tbody>
           </table>  
         </div>
         <Modal

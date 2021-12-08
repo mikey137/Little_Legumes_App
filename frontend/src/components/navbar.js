@@ -16,8 +16,10 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
+import Link from '@mui/material/Link';
 import { colorTheme } from '../ThemeContext';
 import { Navigate } from 'react-router-dom'
+import axios from 'axios'
 
 const drawerWidth = 240;
 
@@ -90,9 +92,23 @@ export default function Navbar() {
     setOpen(false);
   };
 
+  const handleLogout = () => {
+    axios({
+      method: "GET",
+      withCredentials: true,
+      url: `http://localhost:3001/logout`,
+    }).then((res) => {
+      localStorage.clear()
+      sessionStorage.clear()
+      setIsLoggedIn(false)
+    })
+  };
+    
+
   if(!isLoggedIn){
     return <Navigate replace to="/" />
 }
+
 
   return (
     <ThemeProvider theme={colorTheme}>
@@ -140,11 +156,14 @@ export default function Navbar() {
             </DrawerHeader>
             <Divider />
             <List>
-            {['Add Moment','View Friends and Family', 'Add Friends and Family', 'Logout'].map((text, index) => (
-              <ListItem button key={text}>
-              <ListItemText primary={text} />
+              <Link href="/Addfamily">
+                <ListItem button>
+                  <ListItemText primary="Add Family Members" />
+                </ListItem>
+              </Link>
+              <ListItem button onClick={handleLogout}>
+                <ListItemText primary="Logout" />
               </ListItem>
-            ))}
             </List>
           </Drawer>
         </Box>

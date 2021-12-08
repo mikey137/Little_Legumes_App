@@ -7,6 +7,7 @@ import Select from '@mui/material/Select';
 import { ThemeProvider } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
 import { colorTheme } from '../../ThemeContext';
 import Navbar from '../navbar';
 import axios from 'axios'
@@ -18,6 +19,7 @@ export default function AddFAndFForm(){
     const [relationship, setRelationship] = useState("")
     const [email, setEmail] = useState("")
     const [connectedUser, setConnectedUser] = useState()
+    const [isSuccessAlertOpen, setIsSuccessAlertOpen] = useState(false)
 
     useEffect(() => {
         const loggedInUser = localStorage.getItem("user");
@@ -41,6 +43,9 @@ export default function AddFAndFForm(){
           url: "http://localhost:3001/addFamilyMember",
         }).then((res) => {
           console.log(res) 
+          if(res.data === "New Family Member Added"){
+            setIsSuccessAlertOpen(true)
+          }
         });
     };
 
@@ -70,7 +75,16 @@ export default function AddFAndFForm(){
                     <MenuItem value={'other'}>Other</MenuItem>
                     </Select>
                 </FormControl>
-                <TextField onChange={(e) => setEmail(e.target.value)} sx={{ m:2, bgcolor: 'white', width: '90%'  }} id="outlined-basic" label="Email" variant="outlined" />
+                <TextField 
+                  onChange={(e) => setEmail(e.target.value)} 
+                  sx={{ m:2, bgcolor: 'white', width: '90%'  }} 
+                  id="outlined-basic" 
+                  label="Email" 
+                  variant="outlined" 
+                />
+                <div className={isSuccessAlertOpen ? 'show' : 'hidden' }>
+                  <Alert severity="success">Family Member Successfully Added</Alert>
+                </div>
                 <Stack sx={{m:2}}spacing={2} direction="column" justifyContent="center" width="300px">
                     <Button onClick={addFamilyMember} color ="secondary" variant="contained">Add Person</Button>
                     <Button color = "info" variant="contained">Cancel</Button>
