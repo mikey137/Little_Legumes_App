@@ -54,8 +54,6 @@ export default function Login(){
     }).then((res) => {
       console.log(res)
       if(res.data === 'Successfully Authenticated'){
-        console.log('logged in')
-       
         getUser()
       }  
       if(res.data === "No User Exists"){
@@ -70,10 +68,8 @@ export default function Login(){
       withCredentials: true,
       url: `http://localhost:3001/user`,
     }).then((res) => {
-      console.log('got user info')
       localStorage.setItem('user', JSON.stringify(res.data))
       setIsLoggedIn(true)
-      
     });
   };
 
