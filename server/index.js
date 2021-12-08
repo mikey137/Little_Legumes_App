@@ -11,7 +11,7 @@ const User = require('./models/User')
 const FamilyMember = require('./models/FamilyMember')
 const Photo = require('./models/Photo')
 
-mongoose.connect(
+/*mongoose.connect(
     "mongodb+srv://mhulme:SThendy137!@cluster0.aq0gb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
     {
         useNewUrlParser: true,
@@ -20,7 +20,7 @@ mongoose.connect(
     () => {
         console.log('Mongoose Is Connected')
     }
-)
+)*/
 
 app.use(express.static('public'));
 app.use(express.json({ limit: '50mb' }));
