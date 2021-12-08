@@ -10,6 +10,7 @@ const MongoStore = require('connect-mongo')
 const User = require('./models/User')
 const FamilyMember = require('./models/FamilyMember')
 const Photo = require('./models/Photo')
+const path = require('path')
 
 mongoose.connect(
     "mongodb+srv://mhulme:SThendy137!@cluster0.aq0gb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
@@ -24,6 +25,7 @@ mongoose.connect(
 
 
 app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, "/frontend/build")));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors({
