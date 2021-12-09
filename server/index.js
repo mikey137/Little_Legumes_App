@@ -48,9 +48,7 @@ app.use(passport.session({
     saveUninitialized: true,
 }));
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname,'..','frontend/build/index.html'));
-  });
+
 
 app.post("/login", (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
@@ -176,6 +174,10 @@ app.get("/familymembers", (req, res) => {
         }
     })
 })
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname,'..','frontend/build/index.html'));
+  });
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`)

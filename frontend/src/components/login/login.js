@@ -84,7 +84,7 @@ export default function Login(){
           <div className="title_login_card">
               <h1>Little Legumes</h1>
               <div className="login_card">
-              <FontAwesomeIcon icon={faSeedling} size="10x" inverse />
+              <FontAwesomeIcon icon={faSeedling} size="8x" inverse />
                   <TextField onChange={(e) => setLoginEmail(e.target.value)} sx={{ m: 1, width: '25ch', bgcolor: 'white' }} id="filled-basic" label="Email" variant="filled" />
                   <FormControl onChange={(e) => setLoginPassword(e.target.value)} sx={{ m: 1, width: '25ch', bgcolor: 'white' }} variant="filled">
                       <InputLabel htmlFor="filled-adornment-password">Password</InputLabel>
