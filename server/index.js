@@ -48,9 +48,13 @@ app.use(passport.session({
     saveUninitialized: true,
 }));
 
-app.options('/', cors())
+const corsOptions = {
+    origin: true,
+    credentials: true
+}
 
-app.post("/login", cors(), (req, res, next) => {
+app.options('*', cors(corsOptions))
+app.post("/login", (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
       if (err) throw err;
       if (!user) res.send("No User Exists");
@@ -64,12 +68,12 @@ app.post("/login", cors(), (req, res, next) => {
     })(req, res, next);
 });
 
-app.get('/logout', cors(), function(req, res){
+app.get('/logout', function(req, res){
     req.logout();
     res.send("Logged Out")
   });
 
-app.post('/api/upload', cors(), async (req, res) => {
+app.post('/api/upload', async (req, res) => {
     try {
         const fileStr = req.body.data;
         const uploadResponse = await cloudinary.v2.uploader.unsigned_upload(fileStr, 'k0l0cx3a');
@@ -80,7 +84,7 @@ app.post('/api/upload', cors(), async (req, res) => {
     }
 });
 
-app.post("/register", cors(), (req, res) => {
+app.post("/register", (req, res) => {
     User.findOne({ email: req.body.email }, async (err, doc) => {
       if (err) throw err;
       if (doc) res.send("User Already Exists");
@@ -100,7 +104,7 @@ app.post("/register", cors(), (req, res) => {
     });
 });
 
-app.post("/addFamilyMember", cors(), (req, res) => {
+app.post("/addFamilyMember", (req, res) => {
     FamilyMember.findOne({ email: req.body.email }, async (err, doc) => {
         if(err) throw err
         if(doc) res.send("Family Member Already Exists")
@@ -118,7 +122,7 @@ app.post("/addFamilyMember", cors(), (req, res) => {
     })
 })
 
-app.post("/addphoto", cors(), (req, res) => {
+app.post("/addphoto", (req, res) => {
     Photo.findOne({ url: req.body.url }, async (err, photo) => {
         if(err) throw err
         if(photo) res.send("Photo Already Exists")
@@ -136,7 +140,7 @@ app.post("/addphoto", cors(), (req, res) => {
     }) 
 })
 
-app.get("/user", cors(), (req, res) => {
+app.get("/user", (req, res) => {
     console.log(req)
     User.findOne({username: req.user.username}, (err, user) => {
         if(err) throw err
@@ -151,7 +155,7 @@ app.get("/user", cors(), (req, res) => {
     })
 });
 
-app.get("/photos", cors(), (req, res) => {
+app.get("/photos", (req, res) => {
     Photo.find({user: req.user.username}, (err, photos) => {
         if(err) throw err
         if(photos) res.send({
@@ -163,7 +167,7 @@ app.get("/photos", cors(), (req, res) => {
     })
 })
 
-app.get("/familymembers", cors(), (req, res) => {
+app.get("/familymembers", (req, res) => {
     FamilyMember.find({connectedUser: req.user.username}, (err, family) => {
         if(err) throw err
         if(family) res.send({
@@ -175,7 +179,7 @@ app.get("/familymembers", cors(), (req, res) => {
     })
 })
 
-app.get('*', cors(), (req, res) => {
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname,'..','frontend/build/index.html'));
   });
 
