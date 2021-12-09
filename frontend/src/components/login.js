@@ -13,9 +13,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSeedling } from '@fortawesome/free-solid-svg-icons'
 import Link from '@mui/material/Link';
 import { ThemeProvider } from '@mui/material/styles';
-import { colorTheme } from '../../ThemeContext';
+import { colorTheme } from '../ThemeContext';
 import axios from 'axios'
 import { Navigate } from 'react-router-dom'
+import { apiConfig } from '../Constants';
 
 export default function Login(){
   const [loginEmail, setLoginEmail] = useState("")
@@ -23,9 +24,11 @@ export default function Login(){
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isNoUserAlertOpen, setIsNoUserAlertOpen] = useState(false)
   const [values, setValues] = useState({
-      password: '',
-      showPassword: false,
-    });
+    password: '',
+    showPassword: false,
+  });
+
+  let url = apiConfig.url.API_URL
   
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -50,7 +53,7 @@ export default function Login(){
         password: loginPassword,
       },
       withCredentials: true,
-      url: "http://localhost:3001/login",
+      url: `${url}/login`,
     }).then((res) => {
       console.log(res)
       if(res.data === 'Successfully Authenticated'){
@@ -66,7 +69,7 @@ export default function Login(){
     axios({
       method: "GET",
       withCredentials: true,
-      url: `http://localhost:3001/user`,
+      url: `${url}/user`,
     }).then((res) => {
       localStorage.setItem('user', JSON.stringify(res.data))
       setIsLoggedIn(true)
@@ -112,8 +115,7 @@ export default function Login(){
                   <Link href="/register"><Button sx={{ m: 1, width: '25ch', bgcolor: "white" }} variant="outlined">Sign Up</Button></Link>
                   <div className={isNoUserAlertOpen ? 'show' : 'hidden'}>
                     <Alert sx={{ m: 1}} variant= "filled" severity="error">Sorry, please try a different email or password</Alert>
-                  </div>
-                  
+                  </div>   
               </div>
           </div>
       </div>
