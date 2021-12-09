@@ -48,7 +48,7 @@ app.use(passport.session({
     saveUninitialized: true,
 }));
 
-
+app.options('/', cors())
 
 app.post("/login", (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
