@@ -7,6 +7,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import InfiniteScroll from "react-infinite-scroll-component"
 import axios from 'axios'
+import { apiConfig } from '../../Constants';
 
 const style = {
   position: 'absolute',
@@ -34,11 +35,13 @@ export default function Calendar(){
   const [photoUrl, setPhotoUrl] = useState("")
   const [userPhotos, setUserPhotos] = useState([])
 
+  let url = apiConfig.url.API_URL
+
   const getPhotos = () => {
     axios({
       method: "GET",
       withCredentials: true,
-      url: "http://localhost:3001/photos",
+      url: `${url}/photos`,
     }).then((res) => {
       const photos = res.data.photos
       setUserPhotos(photos)
@@ -58,7 +61,7 @@ export default function Calendar(){
         url: photoUrl
       },
       withCredentials: true,
-      url: "http://localhost:3001/addphoto",
+      url: `${url}/addphoto`,
     }).then((res) => {
       console.log(res) 
     });

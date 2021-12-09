@@ -11,6 +11,7 @@ import Alert from '@mui/material/Alert';
 import { colorTheme } from '../../ThemeContext';
 import Navbar from '../navbar';
 import axios from 'axios'
+import { apiConfig } from '../../Constants';
 
 
 export default function AddFAndFForm(){
@@ -20,6 +21,8 @@ export default function AddFAndFForm(){
     const [email, setEmail] = useState("")
     const [connectedUser, setConnectedUser] = useState()
     const [isSuccessAlertOpen, setIsSuccessAlertOpen] = useState(false)
+
+    let url = apiConfig.url.API_URL
 
     useEffect(() => {
         const loggedInUser = localStorage.getItem("user");
@@ -40,7 +43,7 @@ export default function AddFAndFForm(){
             connectedUser: connectedUser
           },
           withCredentials: true,
-          url: "http://localhost:3001/addFamilyMember",
+          url: `${url}/addFamilyMember`,
         }).then((res) => {
           console.log(res) 
           if(res.data === "New Family Member Added"){

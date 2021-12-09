@@ -20,6 +20,7 @@ import Link from '@mui/material/Link';
 import { colorTheme } from '../ThemeContext';
 import { Navigate } from 'react-router-dom'
 import axios from 'axios'
+import { apiConfig } from '../Constants'
 
 const drawerWidth = 240;
 
@@ -74,6 +75,8 @@ export default function Navbar() {
   const [userInfo, setUserInfo] = useState("")
   const [isLoggedIn, setIsLoggedIn] = useState(true)
 
+  let url = apiConfig.url.API_URL
+
   useEffect(() => {
     const loggedInUser = localStorage.getItem("user");
     if (loggedInUser) {
@@ -96,7 +99,7 @@ export default function Navbar() {
     axios({
       method: "GET",
       withCredentials: true,
-      url: `http://localhost:3001/logout`,
+      url: `${url}/logout`,
     }).then((res) => {
       localStorage.clear()
       sessionStorage.clear()

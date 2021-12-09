@@ -7,6 +7,7 @@ import { colorTheme } from '../../ThemeContext';
 import { ThemeProvider } from '@mui/material/styles';
 import axios from 'axios'
 import { Navigate } from 'react-router-dom'
+import { apiConfig } from '../../Constants';
 
 
 export default function Register(){
@@ -24,6 +25,8 @@ export default function Register(){
     const [isEmailAlertOpen, setIsEmailAlertOpen] = useState(false)
     const [isPasswordMatchAlertOpen, setIsPasswordMatchAlertOpen] = useState(false)
     const [isPasswordStrengthAlertOpen, setIsPasswordStrengthAlertOpen] = useState(false)
+
+    let url = apiConfig.url.API_URL
 
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
     const strongPasswordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/
@@ -102,7 +105,7 @@ export default function Register(){
             username: registerEmail
           },
           withCredentials: true,
-          url: "http://localhost:3001/register"
+          url: `${url}/register`
         }).then((res) => {
             console.log(res)
             if(res.status === 200){
