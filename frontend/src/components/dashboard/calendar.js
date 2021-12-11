@@ -10,6 +10,7 @@ import InfiniteScroll from "react-infinite-scroll-component"
 import axios from 'axios'
 import { apiConfig } from '../../Constants';
 
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -80,7 +81,6 @@ export default function Calendar(){
   }, [])
 
   const mapPhotosToDates = () => {
-    console.log('test')
     for(let i = 0; i < userPhotos.length; i++){
       let photo = userPhotos[i]
       let id = photo.dateId
@@ -222,6 +222,7 @@ export default function Calendar(){
             </Button>
           </Box>
         </Modal>
+        
       </div>
        ))} 
     </InfiniteScroll>    
