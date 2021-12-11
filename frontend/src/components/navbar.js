@@ -159,9 +159,19 @@ export default function Navbar() {
             </DrawerHeader>
             <Divider />
             <List>
+              <Link href="/dashboard">
+                <ListItem button>
+                  <ListItemText primary="My Calendar" />
+                </ListItem>
+              </Link>
               <Link href="/Addfamily">
                 <ListItem button>
                   <ListItemText primary="Add Family Members" />
+                </ListItem>
+              </Link>
+              <Link href="/family">
+                <ListItem button>
+                  <ListItemText primary="View Family Members" />
                 </ListItem>
               </Link>
               <ListItem button onClick={handleLogout}>

@@ -130,6 +130,7 @@ table {
 /* Login CSS */
 .container {
   overflow: hidden;
+  max-height: 100vh;
 }
 
 .sliding-background {
@@ -154,7 +155,7 @@ h1 {
     background: url("LLloginbackground900.jpg") repeat-x center;
   }
   h1 {
-    font-size: 4em;
+    font-size: 3em;
     margin: 20px;
   }
 }
@@ -189,4 +190,19 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+/* view Family Page */
+
+.list-container {
+  max-width: 250px;
+  margin: auto;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+    rgba(0, 0, 0, 0.22) 0px 15px 12px;
+}
+
+.family-list-title {
+  color: #616161;
+  text-align: center;
 }

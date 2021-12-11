@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
 import InfiniteScroll from "react-infinite-scroll-component"
 import axios from 'axios'
 import { apiConfig } from '../../Constants';
@@ -34,6 +35,7 @@ export default function Calendar(){
   const [photoThumbnailUrl, setPhotoThumbnailUrl] = useState("")
   const [photoUrl, setPhotoUrl] = useState("")
   const [userPhotos, setUserPhotos] = useState([])
+  const [isPhotoUploadAlertOpen, setIsPhotoUploadAlertOpen] = useState(false)
 
   let url = apiConfig.url.API_URL
 
@@ -153,6 +155,7 @@ export default function Calendar(){
         console.log('Done! Here is the image info: ', result.info);
         setPhotoUrl(result.info.url)
         setPhotoThumbnailUrl(result.info.thumbnail_url)
+        setIsPhotoUploadAlertOpen(true)
       }
     }
   )
@@ -182,14 +185,7 @@ export default function Calendar(){
             <Typography sx={{m: 3}}id="modal-modal-title" variant="h6" component="h2">
               Add Moment
             </Typography>
-            <TextField
-              onChange={(e) => {setMomentCaption(e.target.vaule)}}
-              sx={{m: 3, width: '90%'}}
-              id="outlined-multiline-static"
-              label="Caption"
-              multiline
-              rows={4}
-            /> 
+            <div className="calendar-day" style={{backgroundImage: `url(${photoUrl})`}}></div>
             <Button 
               onClick={() => {myWidget.open()}} 
               sx={{m: 1, width: '75%', maxWidth: '250px'}} 
@@ -199,8 +195,25 @@ export default function Calendar(){
             >
               Upload Photo
             </Button>
+            <div className={isPhotoUploadAlertOpen ? 'show' : 'hidden'}>
+              <Alert variant="outlined" severity="success">Photo selected to upload - Add a caption and click sumbit to finalize!</Alert>
+            </div>
+            <TextField
+              onChange={(e) => {setMomentCaption(e.target.vaule)}}
+              sx={{m: 3, width: '90%'}}
+              id="outlined-multiline-static"
+              label="Caption"
+              multiline
+              rows={4}
+            /> 
             <Button 
-              onClick={addPhoto} 
+              onClick={() => {
+                addPhoto();
+                handleCloseModal(); 
+                setIsPhotoUploadAlertOpen(false);
+                setPhotoUrl("");
+                setPhotoThumbnailUrl("")
+              }} 
               sx={{m: 3, width: '75%'}} 
               variant="contained" 
               color="secondary"

@@ -6,24 +6,30 @@ import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import Typography from '@mui/material/Typography';
 import { colorTheme } from '../ThemeContext';
 import { ThemeProvider } from '@mui/material/styles';
 import axios from 'axios'
+import { apiConfig } from '../Constants';
 
 export default function ViewFamily() {
     const [familyMembers, setFamilyMembers] = useState([])
+
+    let url = apiConfig.url.API_URL
 
     const getFamilyMembers = () => {
         axios({
           method: "GET",
           withCredentials: true,
-          url: "http://localhost:3001/familymembers",
+          url: `${url}/familymembers`,
         }).then((res) => {
-          const members = res.data
+          const members = res.data.family
           setFamilyMembers(members)
           console.log('Got Family')
-          console.log(res)
+          console.log(res.data)
         });
     };
 
@@ -34,73 +40,34 @@ export default function ViewFamily() {
     <div>
         <Navbar />
         <ThemeProvider theme={colorTheme} >
-            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-            <ListItem alignItems="flex-start">
-                <ListItemAvatar>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                </ListItemAvatar>
-                <ListItemText
-                primary="Brunch this weekend?"
-                secondary={
-                    <React.Fragment>
-                    <Typography
-                        sx={{ display: 'inline' }}
-                        component="span"
-                        variant="body2"
-                        color="text.primary"
-                    >
-                        Ali Connors
-                    </Typography>
-                    {" — I'll be in your neighborhood doing errands this…"}
-                    </React.Fragment>
-                }
-                />
-            </ListItem>
-            <Divider variant="inset" component="li" />
-            <ListItem alignItems="flex-start">
-                <ListItemAvatar>
-                <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-                </ListItemAvatar>
-                <ListItemText
-                primary="Summer BBQ"
-                secondary={
-                    <React.Fragment>
-                    <Typography
-                        sx={{ display: 'inline' }}
-                        component="span"
-                        variant="body2"
-                        color="text.primary"
-                    >
-                        to Scott, Alex, Jennifer
-                    </Typography>
-                    {" — Wish I could come, but I'm out of town this…"}
-                    </React.Fragment>
-                }
-                />
-            </ListItem>
-            <Divider variant="inset" component="li" />
-            <ListItem alignItems="flex-start">
-                <ListItemAvatar>
-                <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-                </ListItemAvatar>
-                <ListItemText
-                primary="Oui Oui"
-                secondary={
-                    <React.Fragment>
-                    <Typography
-                        sx={{ display: 'inline' }}
-                        component="span"
-                        variant="body2"
-                        color="text.primary"
-                    >
-                        Sandra Adams
-                    </Typography>
-                    {' — Do you have Paris recommendations? Have you ever…'}
-                    </React.Fragment>
-                }
-                />
-            </ListItem>
-            </List>
+            <div className="list-container">
+                <h2 className="family-list-title">Friends and Family</h2>
+                <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper'}}>
+                {familyMembers.map((member) => (
+                    <ListItem key={member._id} alignItems="flex-start" sx={{marginBottom: 1}}>
+                        <AccountCircleIcon sx={{fontSize: 50, marginRight: 2}} />
+                        <ListItemText
+                            primary= {`${member.firstName} ${member.lastName}`} 
+                            secondary={
+                            <React.Fragment>
+                            <Typography
+                                sx={{ display: 'inline' }}
+                                component="span"
+                                variant="body2"
+                                color="text.primary"
+                            >
+                                {member.email}
+                            </Typography>
+                            -{member.relationship}
+                            </React.Fragment>
+                        }
+                        />
+                        <EditIcon color="secondary" sx={{margin: 1}}  />
+                        <DeleteIcon color="error"  sx={{margin: 1}} />
+                    </ListItem> 
+                    ))}
+                </List>
+            </div>
         </ThemeProvider>
     </div>
   );
