@@ -9,6 +9,7 @@ import Avatar from '@mui/material/Avatar';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { colorTheme } from '../ThemeContext';
 import { ThemeProvider } from '@mui/material/styles';
@@ -32,10 +33,22 @@ export default function ViewFamily() {
           console.log(res.data)
         });
     };
-
+    
     useEffect(() => {
         getFamilyMembers()
     },[])
+
+    const deleteFamilyMember = (id) => {
+        console.log(id)
+        axios({
+          method: "DELETE",
+          withCredentials: true,
+          url: `${url}/deletefamily/${id}`,
+        }).then((res) => {
+          console.log('family member deleted')
+        });
+    };
+
   return (
     <div>
         <Navbar />
@@ -63,7 +76,9 @@ export default function ViewFamily() {
                         }
                         />
                         <EditIcon color="secondary" sx={{margin: 1}}  />
-                        <DeleteIcon color="error"  sx={{margin: 1}} />
+                        <IconButton aria-label="delete" onClick={() => {deleteFamilyMember(member._id); getFamilyMembers()}}>
+                            <DeleteIcon />
+                        </IconButton>
                     </ListItem> 
                     ))}
                 </List>

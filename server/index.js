@@ -176,6 +176,22 @@ app.get("/familymembers", (req, res) => {
     })
 })
 
+app.delete('/deletefamily/:id', async (req, res) => {
+    try {
+        let member = await FamilyMember.findById(req.params.id).lean()
+    
+        if (!member) {
+          return res.render('error/404')
+        } else {
+          await FamilyMember.remove({ _id: req.params.id })
+          console.log('family member deleted')
+        }
+      } catch (err) {
+        console.error(err)
+        return res.render('error/500')
+      }
+})
+
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname,'..','frontend/build/index.html'));
   });

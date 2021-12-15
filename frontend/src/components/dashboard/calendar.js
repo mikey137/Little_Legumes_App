@@ -68,7 +68,6 @@ export default function Calendar(){
     }).then((res) => {
       console.log(res) 
     });
-    getPhotos()
 };
 
   useEffect(() => {
@@ -212,7 +211,8 @@ export default function Calendar(){
                 handleCloseModal(); 
                 setIsPhotoUploadAlertOpen(false);
                 setPhotoUrl("");
-                setPhotoThumbnailUrl("")
+                setPhotoThumbnailUrl("");
+                getPhotos()
               }} 
               sx={{m: 3, width: '75%'}} 
               variant="contained" 
