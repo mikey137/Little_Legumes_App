@@ -2,10 +2,7 @@ import React, {useState, useEffect} from 'react';
 import Navbar from './navbar'
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -15,9 +12,11 @@ import { colorTheme } from '../ThemeContext';
 import { ThemeProvider } from '@mui/material/styles';
 import axios from 'axios'
 import { apiConfig } from '../Constants';
+import AddFAndFForm from './forms/addfriendsandfamily';
 
 export default function ViewFamily() {
     const [familyMembers, setFamilyMembers] = useState([])
+    const [familyMemberToEdit, setFamilyMemberToEdit] = useState()
 
     let url = apiConfig.url.API_URL
 
@@ -75,15 +74,18 @@ export default function ViewFamily() {
                             </React.Fragment>
                         }
                         />
-                        <EditIcon color="secondary" sx={{margin: 1}}  />
+                        <IconButton aria-label="delete" onClick={() => setFamilyMemberToEdit(member) }>
+                            <EditIcon color="secondary" />
+                        </IconButton>
                         <IconButton aria-label="delete" onClick={() => {deleteFamilyMember(member._id); getFamilyMembers()}}>
-                            <DeleteIcon />
+                            <DeleteIcon color="error" />
                         </IconButton>
                     </ListItem> 
                     ))}
                 </List>
             </div>
         </ThemeProvider>
+        <AddFAndFForm member= {familyMemberToEdit} />
     </div>
   );
 }

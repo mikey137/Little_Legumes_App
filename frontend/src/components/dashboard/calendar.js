@@ -7,9 +7,11 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import InfiniteScroll from "react-infinite-scroll-component"
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import axios from 'axios'
 import { apiConfig } from '../../Constants';
-
 
 const style = {
   position: 'absolute',
@@ -36,7 +38,10 @@ export default function Calendar(){
   const [photoThumbnailUrl, setPhotoThumbnailUrl] = useState("")
   const [photoUrl, setPhotoUrl] = useState("")
   const [userPhotos, setUserPhotos] = useState([])
+  const [momentsSubArray, setMomentsSubArray] = useState([])
   const [isPhotoUploadAlertOpen, setIsPhotoUploadAlertOpen] = useState(false)
+  const [isDailyMomentsDrawOpen, setIsDailyMomentsDrawOpen] = useState(false)
+  const [state, setState] = useState("")
 
   let url = apiConfig.url.API_URL
 
@@ -91,10 +96,15 @@ export default function Calendar(){
   useEffect(() => {
     mapPhotosToDates()
   },[userPhotos])
+
+  const addPhotoInfoToModal = (id) => {
+    console.log(id)
+    let subArray = userPhotos.filter(photo => photo.dateId === id)
+    setMomentsSubArray(subArray)
+  }
  
-  const handleOpenModal = (e) => {
+  const handleOpenModal = () => {
     setIsModalOpen(true);
-    setDateId(e.target.id)
   }
 
   const handleCloseModal = () => setIsModalOpen(false);
@@ -116,13 +126,14 @@ export default function Calendar(){
     let daysInMonth = []
     for(let d = 1; d <= daysInThisMonth; d++){
       daysInMonth.push(<td 
-          onClick={handleOpenModal} 
+          onClick={handleOpenDraw} 
           key={d} 
           id={`${m}+${d}`} 
           className={"calendar-day"}
         >
           {d}
         </td>
+        
       )
     }
     let totalSlots = blanks.concat(daysInMonth)
@@ -159,6 +170,49 @@ export default function Calendar(){
     }
   )
 
+  const handleOpenDraw = (e) => {
+    setDateId(e.target.id)
+    addPhotoInfoToModal(e.target.id)
+    setIsDailyMomentsDrawOpen(true)
+  }
+
+  const handleCloseDraw = () => {
+    setMomentsSubArray([])
+    setIsDailyMomentsDrawOpen(false)
+  }
+
+  const drawerContent = (anchor) => (
+    <Box
+      sx={{ 
+          width: '100vw', 
+          height: '60vh',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center'
+      }}
+      role="presentation"
+    >
+      <IconButton 
+        sx={{mr: '90vw'}}
+        onClick={handleCloseDraw}
+      >
+        <CloseIcon />
+      </IconButton>
+      <Button variant= 'outlined' onClick={handleOpenModal}>
+        Add New Moment
+      </Button>
+      <Typography sx={{m: 3}} variant="h6" component="h2">
+        Moments From This Day
+      </Typography>
+      {momentsSubArray.map((moment, index) => (
+        <div>
+          <div className="modal-moment" style={{backgroundImage: `url(${moment.url})`}}></div>
+          <h3>{moment.momentCaption}</h3>
+        </div>
+      ))}
+    </Box>
+  )
+
   return(
     <InfiniteScroll
       dataLength={months.length}
@@ -179,10 +233,11 @@ export default function Calendar(){
           onClose={handleCloseModal}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
+          id={dateId}
         >
           <Box sx={style}>
             <Typography sx={{m: 3}}id="modal-modal-title" variant="h6" component="h2">
-              Add Moment
+              Moments from this day
             </Typography>
             <div className="calendar-day" style={{backgroundImage: `url(${photoUrl})`}}></div>
             <Button 
@@ -198,7 +253,7 @@ export default function Calendar(){
               <Alert variant="outlined" severity="success">Photo selected to upload - Add a caption and click sumbit to finalize!</Alert>
             </div>
             <TextField
-              onChange={(e) => {setMomentCaption(e.target.vaule)}}
+              onChange={(e) => setMomentCaption(e.target.value)}
               sx={{m: 3, width: '90%'}}
               id="outlined-multiline-static"
               label="Caption"
@@ -222,7 +277,14 @@ export default function Calendar(){
             </Button>
           </Box>
         </Modal>
-        
+        <SwipeableDrawer
+            anchor={'bottom'}
+            open={isDailyMomentsDrawOpen}
+            onClose={handleCloseDraw}
+            onOpen={handleOpenDraw}   
+          >
+            {drawerContent('bottom')}
+        </SwipeableDrawer>
       </div>
        ))} 
     </InfiniteScroll>    

@@ -14,13 +14,15 @@ import axios from 'axios'
 import { apiConfig } from '../../Constants';
 
 
-export default function AddFAndFForm(){
+export default function AddFAndFForm(member){
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [relationship, setRelationship] = useState("")
     const [email, setEmail] = useState("")
     const [connectedUser, setConnectedUser] = useState()
     const [isSuccessAlertOpen, setIsSuccessAlertOpen] = useState(false)
+    const [editingFamily, setEditingFamily] = useState(false)
+    const [memberToEdit, setMemberToEdit] = useState(member)
 
     let url = apiConfig.url.API_URL
 
@@ -31,6 +33,10 @@ export default function AddFAndFForm(){
           setConnectedUser(foundUser.username);
         }
     }, []);
+
+    useEffect(() => {
+      setMemberToEdit(member)
+    }, [member])
 
     const addFamilyMember = () => {
         axios({
@@ -57,8 +63,21 @@ export default function AddFAndFForm(){
             <Navbar />
             <div className="add-family">
                 <h2 id="friends-family-header">Add family and friends</h2>
-                <TextField onChange={(e) => setFirstName(e.target.value)} sx={{ m:2, bgcolor: 'white', width: '90%' }} id="outlined-basic" label="First Name" variant="outlined" />
-                <TextField onChange={(e) => setLastName(e.target.value)} sx={{ m:2, bgcolor: 'white', width: '90%'  }} id="outlined-basic" label="Last Name" variant="outlined" />
+                <TextField 
+                  onChange={(e) => setFirstName(e.target.value)} 
+                  sx={{ m:2, bgcolor: 'white', width: '90%' }} 
+                  id="outlined-basic" 
+                  label="First Name" 
+                  variant="outlined" 
+                  defaultValue={memberToEdit.member} 
+                />
+                <TextField 
+                  onChange={(e) => setLastName(e.target.value)} 
+                  sx={{ m:2, bgcolor: 'white', width: '90%'  }} 
+                  id="outlined-basic" 
+                  label="Last Name" 
+                  variant="outlined" 
+                />
                 <FormControl sx={{ m:2, bgcolor: 'white', width: '90%' }}>
                     <InputLabel id="demo-simple-select-label">relationship to child</InputLabel>
                     <Select
