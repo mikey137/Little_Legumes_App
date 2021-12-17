@@ -54,15 +54,41 @@ h1 {
   background-size: cover;
 }
 
-.modal-moment {
-  width: 20vw;
-  height: 20vw;
-  border-radius: 3px;
+.moment-image {
+  width: 95%;
+  max-width: 450px;
+  height: 95vw;
+  max-height: 450px;
+  border-radius: 5px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
     rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+}
+
+.moments-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 95%;
+}
+
+@media (max-width: 800px) {
+  .moments-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 95%;
+  }
+}
+
+.moment-wrapper {
+  width: 90%;
+  max-width: 450px;
+  height: 90vw;
+  max-height: 450px;
+  margin-bottom: 1em;
 }
 
 h3 {

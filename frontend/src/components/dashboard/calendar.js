@@ -185,7 +185,7 @@ export default function Calendar(){
     <Box
       sx={{ 
           width: '100vw', 
-          height: '60vh',
+          height: '80vh',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center'
@@ -204,12 +204,14 @@ export default function Calendar(){
       <Typography sx={{m: 3}} variant="h6" component="h2">
         Moments From This Day
       </Typography>
-      {momentsSubArray.map((moment, index) => (
-        <div>
-          <div className="modal-moment" style={{backgroundImage: `url(${moment.url})`}}></div>
-          <h3>{moment.momentCaption}</h3>
-        </div>
-      ))}
+      <div className = "moments-container">
+        {momentsSubArray.map((moment, index) => (
+          <div className = "moment-wrapper">
+            <div className="moment-image" style={{backgroundImage: `url(${moment.url})`}}></div>
+            <h3>{moment.momentCaption}</h3>
+          </div>
+        ))}
+      </div>
     </Box>
   )
 
