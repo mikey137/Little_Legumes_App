@@ -57,11 +57,11 @@ export default function ViewFamily() {
 
     const handleOpenDraw = (e) => {
         setIsDrawOpen(true)
-        setIsEdit(false)
     }
 
     const handleCloseDraw = (e) => {
         setIsDrawOpen(false)
+        setIsEdit(false)
     }
 
     const drawerContent = (anchor) => (
