@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Navbar from './navbar'
+import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -7,16 +8,22 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import { colorTheme } from '../ThemeContext';
 import { ThemeProvider } from '@mui/material/styles';
 import axios from 'axios'
 import { apiConfig } from '../Constants';
 import AddFAndFForm from './forms/addfriendsandfamily';
+import EditFamilyForm from './forms/ediitFamily';
 
 export default function ViewFamily() {
     const [familyMembers, setFamilyMembers] = useState([])
     const [familyMemberToEdit, setFamilyMemberToEdit] = useState()
+    const [isDrawOpen, setIsDrawOpen] = useState(false)
+    const [isEdit, setIsEdit] = useState(false)
 
     let url = apiConfig.url.API_URL
 
@@ -48,6 +55,38 @@ export default function ViewFamily() {
         });
     };
 
+    const handleOpenDraw = (e) => {
+        setIsDrawOpen(true)
+        setIsEdit(false)
+    }
+
+    const handleCloseDraw = (e) => {
+        setIsDrawOpen(false)
+    }
+
+    const drawerContent = (anchor) => (
+        <ThemeProvider theme={colorTheme} >
+            <Box
+            sx={{ 
+                width: '100vw', 
+                height: '80vh',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center'
+            }}
+            role="presentation"
+            >
+                <IconButton 
+                    sx={{mr: '90vw'}}
+                    onClick={handleCloseDraw}
+                >
+                    <CloseIcon />
+                </IconButton>
+                {isEdit ? <EditFamilyForm member= {familyMemberToEdit} /> : <AddFAndFForm />}   
+            </Box>
+        </ThemeProvider>
+    )
+
   return (
     <div>
         <Navbar />
@@ -74,7 +113,7 @@ export default function ViewFamily() {
                             </React.Fragment>
                         }
                         />
-                        <IconButton aria-label="delete" onClick={() => setFamilyMemberToEdit(member) }>
+                        <IconButton aria-label="delete" onClick={() => {setIsEdit(true); handleOpenDraw(); setFamilyMemberToEdit(member) }}>
                             <EditIcon color="secondary" />
                         </IconButton>
                         <IconButton aria-label="delete" onClick={() => {deleteFamilyMember(member._id); getFamilyMembers()}}>
@@ -83,9 +122,23 @@ export default function ViewFamily() {
                     </ListItem> 
                     ))}
                 </List>
+                <Button 
+                    onClick={handleOpenDraw} 
+                    sx={{ m: 1, width: '25ch', }} 
+                    variant="outlined"
+                >
+                    Add Family Member
+                </Button>
             </div>
         </ThemeProvider>
-        <AddFAndFForm member= {familyMemberToEdit} />
+        <SwipeableDrawer
+            anchor={'bottom'}
+            open={isDrawOpen}
+            onClose={handleCloseDraw}
+            onOpen={handleOpenDraw}   
+        >
+            {drawerContent('bottom')}
+        </SwipeableDrawer>
     </div>
   );
 }

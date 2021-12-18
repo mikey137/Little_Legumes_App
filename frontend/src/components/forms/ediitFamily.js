@@ -1,27 +1,25 @@
 import React, { useState, useEffect } from 'react'
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import NativeSelect from '@mui/material/NativeSelect';
 import { ThemeProvider } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import Alert from '@mui/material/Alert';
 import { colorTheme } from '../../ThemeContext';
 import Navbar from '../navbar';
 import axios from 'axios'
 import { apiConfig } from '../../Constants';
 
 
-export default function AddFAndFForm(member){
-    const [firstName, setFirstName] = useState("")
-    const [lastName, setLastName] = useState("")
-    const [relationship, setRelationship] = useState("")
-    const [email, setEmail] = useState("")
+export default function EditFamilyForm(member){
+    const [firstName, setFirstName] = useState(member.member.firstName)
+    const [lastName, setLastName] = useState(member.member.lastName)
+    const [relationship, setRelationship] = useState(member.member.relationship)
+    const [email, setEmail] = useState(member.member.email)
     const [connectedUser, setConnectedUser] = useState()
-    const [isSuccessAlertOpen, setIsSuccessAlertOpen] = useState(false)
-    
+    const [isUpdateProcessed, setIsUpdateProcessed] = useState(false)
+
     let url = apiConfig.url.API_URL
 
     useEffect(() => {
@@ -32,9 +30,9 @@ export default function AddFAndFForm(member){
         }
     }, []);
 
-    const addFamilyMember = () => {
+    const editFamilyMember = (id) => {
         axios({
-          method: "POST",
+          method: "PUT",
           data: {
             firstName: firstName,
             lastName: lastName,
@@ -43,11 +41,12 @@ export default function AddFAndFForm(member){
             connectedUser: connectedUser
           },
           withCredentials: true,
-          url: `${url}/addFamilyMember`,
+          url: `${url}/editfamilymember/${id}`,
         }).then((res) => {
           console.log(res) 
-          if(res.data === "New Family Member Added"){
-            setIsSuccessAlertOpen(true)
+          if(res.data === "Member Info Updated"){
+            setIsUpdateProcessed(true)
+            window.location.reload(isUpdateProcessed)
           }
         });
     };
@@ -56,13 +55,14 @@ export default function AddFAndFForm(member){
         <ThemeProvider theme={colorTheme}>
             <Navbar />
             <div className="add-family">
-                <h2 id="friends-family-header">Add family and friends</h2>
+                <h2 id="friends-family-header">Update {member.member.firstName}'s Info</h2>
                 <TextField 
                   onChange={(e) => setFirstName(e.target.value)} 
                   sx={{ m:2, bgcolor: 'white', width: '90%' }} 
                   id="outlined-basic" 
                   label="First Name" 
                   variant="outlined" 
+                  defaultValue={member.member.firstName}
                 />
                 <TextField 
                   onChange={(e) => setLastName(e.target.value)} 
@@ -70,25 +70,26 @@ export default function AddFAndFForm(member){
                   id="outlined-basic" 
                   label="Last Name" 
                   variant="outlined" 
+                  defaultValue={member.member.lastName}
                 />
                 <FormControl sx={{ m:2, bgcolor: 'white', width: '90%' }}>
-                    <InputLabel id="demo-simple-select-label">relationship to child</InputLabel>
-                    <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={relationship}
-                    label="Relationship to Child"
-                    onChange={(e) => setRelationship(e.target.value)}
+                    <InputLabel variant="standard" htmlFor="uncontrolled-native">relationship to child</InputLabel>
+                    <NativeSelect
+                        inputProps={{
+                            id:'uncontrolled-native'
+                        }}
+                        onChange={(e) => setRelationship(e.target.value)}
+                        defaultValue={member.member.relationship}
                     >
-                    <MenuItem value={'mother'}>Mother</MenuItem>
-                    <MenuItem value={'father'}>Father</MenuItem>
-                    <MenuItem value={'grandmother'}>Grandmother</MenuItem>
-                    <MenuItem value={'grandfather'}>Grandfather</MenuItem>
-                    <MenuItem value={'aunt'}>Aunt</MenuItem>
-                    <MenuItem value={'uncle'}>Uncle</MenuItem>
-                    <MenuItem value={'friend'}>Friend</MenuItem>
-                    <MenuItem value={'other'}>Other</MenuItem>
-                    </Select>
+                        <option value={'mother'}>Mother</option>
+                        <option value={'father'}>Father</option>
+                        <option value={'grandmother'}>Grandmother</option>
+                        <option value={'grandfather'}>Grandfather</option>
+                        <option value={'aunt'}>Aunt</option>
+                        <option value={'uncle'}>Uncle</option>
+                        <option value={'friend'}>Friend</option>
+                        <option value={'other'}>Other</option>
+                    </NativeSelect>
                 </FormControl>
                 <TextField 
                   onChange={(e) => setEmail(e.target.value)} 
@@ -96,13 +97,10 @@ export default function AddFAndFForm(member){
                   id="outlined-basic" 
                   label="Email" 
                   variant="outlined" 
+                  defaultValue={member.member.email}
                 />
-                <div className={isSuccessAlertOpen ? 'show' : 'hidden' }>
-                  <Alert severity="success">Family Member Successfully Added</Alert>
-                </div>
                 <Stack sx={{m:2}}spacing={2} direction="column" justifyContent="center" width="300px">
-                    <Button onClick={addFamilyMember} color ="secondary" variant="contained">Add Person</Button>
-                    <Button color = "info" variant="contained">Cancel</Button>
+                    <Button onClick={() => editFamilyMember(member.member._id)} color ="secondary" variant="contained">Update</Button>
                 </Stack>
             </div>
         </ThemeProvider>

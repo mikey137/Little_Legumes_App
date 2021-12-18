@@ -192,6 +192,26 @@ app.delete('/deletefamily/:id', async (req, res) => {
       }
 })
 
+app.put('/editfamilymember/:id', async (req, res) => {
+    console.log(req.body)
+    try {
+        let member = await FamilyMember.findById(req.params.id).lean()
+    
+        if (!member) {
+          return res.render('error/404')
+        } else {
+          await FamilyMember.findOneAndUpdate({ _id: req.params.id }, req.body, {
+            new: true,
+            runValidators: true,
+          })
+          res.send("Member Info Updated")
+        }
+      } catch (err) {
+        console.error(err)
+        return res.render('error/500')
+      }
+})
+
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname,'..','frontend/build/index.html'));
   });
