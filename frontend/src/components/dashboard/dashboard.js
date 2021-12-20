@@ -3,7 +3,7 @@ import Calendar from "./calendar";
 import Navbar from "../navbar";
 import { colorTheme } from "../../ThemeContext";
 import { ThemeProvider } from "@mui/material";
-import BottomNavbar from "./bottomNavigation";
+
 
 
 export default function Dashboard(){
@@ -13,7 +13,6 @@ export default function Dashboard(){
             <div className= "dashboard-container">
                 <Navbar />
                 <Calendar />
-                <BottomNavbar />
             </div>
         </ThemeProvider>
     )

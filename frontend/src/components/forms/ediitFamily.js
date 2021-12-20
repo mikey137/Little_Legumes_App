@@ -7,7 +7,6 @@ import { ThemeProvider } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { colorTheme } from '../../ThemeContext';
-import Navbar from '../navbar';
 import axios from 'axios'
 import { apiConfig } from '../../Constants';
 
@@ -53,7 +52,6 @@ export default function EditFamilyForm(member){
 
     return(
         <ThemeProvider theme={colorTheme}>
-            <Navbar />
             <div className="add-family">
                 <h2 id="friends-family-header">Update {member.member.firstName}'s Info</h2>
                 <TextField 

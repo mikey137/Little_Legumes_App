@@ -8,6 +8,8 @@ import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import InfiniteScroll from "react-infinite-scroll-component"
 import IconButton from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import axios from 'axios'
@@ -41,7 +43,7 @@ export default function Calendar(){
   const [momentsSubArray, setMomentsSubArray] = useState([])
   const [isPhotoUploadAlertOpen, setIsPhotoUploadAlertOpen] = useState(false)
   const [isDailyMomentsDrawOpen, setIsDailyMomentsDrawOpen] = useState(false)
-  const [state, setState] = useState("")
+  const [isEditing, setIsEditing] = useState(false)
 
   let url = apiConfig.url.API_URL
 
@@ -74,6 +76,39 @@ export default function Calendar(){
       console.log(res) 
     });
 };
+
+  const deletePhoto = (id) => {
+    console.log(id)
+    axios({
+      method: "DELETE",
+      withCredentials: true,
+      url: `${url}/deletephoto/${id}`,
+    }).then((res) => {
+      console.log('photo deleted')
+    });
+  };
+
+  const editPhoto = (moment) => {
+    axios({
+      method: "PUT",
+      data: {
+        user: moment.loggedInUser,
+        dateId: moment.dateId,
+        momentCaption: momentCaption,
+        thumbnailUrl: moment.photoThumbnailUrl,
+        url: moment.photoUrl
+      },
+      withCredentials: true,
+      url: `${url}/editphoto/${moment._id}`,
+    }).then((res) => {
+      console.log(res) 
+      if(res.data === "Photo Edit Completed"){
+        setIsEditing(false)
+      }
+    });
+};
+
+
 
   useEffect(() => {
     const loggedInUser = localStorage.getItem("user");
@@ -208,7 +243,38 @@ export default function Calendar(){
         {momentsSubArray.map((moment, index) => (
           <div className = "moment-wrapper">
             <div className="moment-image" style={{backgroundImage: `url(${moment.url})`}}></div>
-            <h3>{moment.momentCaption}</h3>
+            <h3 className={isEditing ? "hidden" : "" }>{moment.momentCaption}</h3>
+            <div className={isEditing ? "editing-container-display" : "editing-container-hidden"}>
+              <TextField
+                onChange={(e) => setMomentCaption(e.target.value)}
+                sx={{m: 3, width: '90%'}}
+                id="outlined-multiline-static"
+                label="Caption"
+                multiline
+                rows={4}
+              /> 
+              <Button
+                onClick={() => {editPhoto(moment)}}  
+                sx={{m: 1, width: '75%', maxWidth: '250px'}} 
+                variant="contained"
+              >
+                Submit Changes
+              </Button>
+              <Button 
+                onClick={() => setIsEditing(false)} 
+                sx={{m: 1, width: '75%', maxWidth: '250px'}} 
+                variant="contained"
+                color="info"
+              >
+                Cancel
+              </Button>
+            </div>
+            <IconButton aria-label="delete" onClick={() => setIsEditing(true)} >
+              <EditIcon color="secondary" />
+            </IconButton>
+            <IconButton aria-label="delete" onClick={() => deletePhoto(moment._id)}>
+              <DeleteIcon color="error" />
+            </IconButton>
           </div>
         ))}
       </div>

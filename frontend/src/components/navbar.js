@@ -121,10 +121,10 @@ export default function Navbar() {
             <Toolbar>
               <Typography variant="h6" noWrap sx={{ flexGrow: 1, display: 'flex', flexDirection: 'row', justifyContent: 'start' }} component="div">
                 <FontAwesomeIcon icon={faSeedling} size="3x" inverse />
-                <h3 className="navbar-title">Little Legumes </h3>
-              </Typography>
-              <Typography variant="h6" noWrap sx={{ flexGrow: 1, display: 'flex', flexDirection: 'row', justifyContent: 'start' }} component="div">
-                Hello {userInfo.firstName}
+                <div className="text">
+                  <h3 className="navbar-title">Little Legumes </h3>
+                  <p>Hello {userInfo.firstName}</p>
+                </div>
               </Typography>
               <IconButton
                 color="inherit"
@@ -162,11 +162,6 @@ export default function Navbar() {
               <Link href="/dashboard">
                 <ListItem button>
                   <ListItemText primary="My Calendar" />
-                </ListItem>
-              </Link>
-              <Link href="/Addfamily">
-                <ListItem button>
-                  <ListItemText primary="Add Family Members" />
                 </ListItem>
               </Link>
               <Link href="/family">

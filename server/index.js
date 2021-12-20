@@ -192,6 +192,22 @@ app.delete('/deletefamily/:id', async (req, res) => {
       }
 })
 
+app.delete('/deletephoto/:id', async (req, res) => {
+    try {
+        let photo = await Photo.findById(req.params.id).lean()
+    
+        if (!photo) {
+          return res.send('photo not found')
+        } else {
+          await Photo.remove({ _id: req.params.id })
+          console.log('photo deleted')
+        }
+    } catch (err) {
+        console.error(err)
+        return res.send('error/500')
+    }
+})
+
 app.put('/editfamilymember/:id', async (req, res) => {
     console.log(req.body)
     try {
@@ -205,6 +221,26 @@ app.put('/editfamilymember/:id', async (req, res) => {
             runValidators: true,
           })
           res.send("Member Info Updated")
+        }
+      } catch (err) {
+        console.error(err)
+        return res.render('error/500')
+      }
+})
+
+app.put('/editphoto/:id', async (req, res) => {
+    console.log(req.body)
+    try {
+        let photo = await Photo.findById(req.params.id).lean()
+    
+        if (!photo) {
+          return res.render('error/404')
+        } else {
+          await Photo.findOneAndUpdate({ _id: req.params.id }, req.body, {
+            new: true,
+            runValidators: true,
+          })
+          res.send("Photo Edit Completed")
         }
       } catch (err) {
         console.error(err)
