@@ -106,7 +106,7 @@ export default function Calendar(){
         setIsEditing(false)
       }
     });
-};
+  };
 
 
 
@@ -243,7 +243,7 @@ export default function Calendar(){
         {momentsSubArray.map((moment, index) => (
           <div className = "moment-wrapper">
             <div className="moment-image" style={{backgroundImage: `url(${moment.url})`}}></div>
-            <h3 className={isEditing ? "hidden" : "" }>{moment.momentCaption}</h3>
+            <p className={isEditing ? "hidden" : "moment-caption" }>{moment.momentCaption}</p>
             <div className={isEditing ? "editing-container-display" : "editing-container-hidden"}>
               <TextField
                 onChange={(e) => setMomentCaption(e.target.value)}
@@ -269,7 +269,7 @@ export default function Calendar(){
                 Cancel
               </Button>
             </div>
-            <IconButton aria-label="delete" onClick={() => setIsEditing(true)} >
+            <IconButton sx={{m:0}}aria-label="delete" onClick={() => setIsEditing(true)} >
               <EditIcon color="secondary" />
             </IconButton>
             <IconButton aria-label="delete" onClick={() => deletePhoto(moment._id)}>
