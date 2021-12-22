@@ -33,6 +33,7 @@ const style = {
 
 export default function Calendar(){
   const [months, setMonths] = useState([moment().format("MMMM YYYY"),moment().add(-1,'M').format("MMMM YYYY"), moment().add(-2,'M').format("MMMM YYYY") ])
+  const [monthCounter, setMonthCounter] = useState(-3)
   const [isModalOpen, setIsModalOpen] = useState(false); 
   const [dateId, setDateId] = useState("")
   const [momentCaption, setMomentCaption] = useState("")
@@ -160,10 +161,12 @@ export default function Calendar(){
   }
   
   const addMoreMonths = () => {
-      let lastMonth = months[months.length-1]
-      let newMonth = moment(lastMonth).add(-1,'M').format("MMMM YYYY") 
-      setMonths(months.concat(newMonth))
-      console.log(months)
+    let lastMonth = months[months.length-1]
+    let newMonth = moment().add(monthCounter,'M').format("MMMM YYYY") 
+    console.log(newMonth)
+    setMonths(months.concat(newMonth))
+    console.log(months)
+    setMonthCounter(monthCounter -1)
   }
     
   let daysInThisMonth = moment().daysInMonth()
