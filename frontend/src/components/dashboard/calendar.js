@@ -61,6 +61,16 @@ export default function Calendar(){
   };
 
   const addPhoto = () => {
+    let photoToAdd = {
+      user: loggedInUser,
+      dateId: dateId,
+      momentCaption: momentCaption,
+      thumbnailUrl: photoThumbnailUrl,
+      url: photoUrl
+    } 
+
+    setMomentsSubArray(oldSubArray => [...oldSubArray, photoToAdd])
+    
     axios({
       method: "POST",
       data: {
@@ -77,12 +87,19 @@ export default function Calendar(){
     });
 };
 
-  const deletePhoto = (id) => {
-    console.log(id)
+  const deletePhoto = (moment) => {
+    document.getElementById(moment.dateId).style.backgroundImage = ""
+
+    let newUserPhotosArray = userPhotos.filter((photo) => photo._id !== moment._id)
+    setUserPhotos(newUserPhotosArray)
+    
+    let newSubArray = momentsSubArray.filter((photo) => photo._id !== moment._id)
+    setMomentsSubArray(newSubArray)
+
     axios({
       method: "DELETE",
       withCredentials: true,
-      url: `${url}/deletephoto/${id}`,
+      url: `${url}/deletephoto/${moment._id}`,
     }).then((res) => {
       console.log('photo deleted')
     });
@@ -108,8 +125,6 @@ export default function Calendar(){
     });
   };
 
-
-
   useEffect(() => {
     const loggedInUser = localStorage.getItem("user");
     if (loggedInUser) {
@@ -120,6 +135,7 @@ export default function Calendar(){
   }, [])
 
   const mapPhotosToDates = () => {
+    console.log('test')
     for(let i = 0; i < userPhotos.length; i++){
       let photo = userPhotos[i]
       let id = photo.dateId
@@ -133,7 +149,6 @@ export default function Calendar(){
   },[userPhotos])
 
   const addPhotoInfoToModal = (id) => {
-    console.log(id)
     let subArray = userPhotos.filter(photo => photo.dateId === id)
     setMomentsSubArray(subArray)
   }
@@ -142,7 +157,9 @@ export default function Calendar(){
     setIsModalOpen(true);
   }
 
-  const handleCloseModal = () => setIsModalOpen(false);
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  }
   
   const addMoreMonths = () => {
       let lastMonth = months[months.length-1]
@@ -272,7 +289,7 @@ export default function Calendar(){
             <IconButton sx={{m:0}}aria-label="delete" onClick={() => setIsEditing(true)} >
               <EditIcon color="secondary" />
             </IconButton>
-            <IconButton aria-label="delete" onClick={() => deletePhoto(moment._id)}>
+            <IconButton aria-label="delete" onClick={() => deletePhoto(moment)}>
               <DeleteIcon color="error" />
             </IconButton>
           </div>
@@ -331,11 +348,11 @@ export default function Calendar(){
             <Button 
               onClick={() => {
                 addPhoto();
+                getPhotos();
                 handleCloseModal(); 
                 setIsPhotoUploadAlertOpen(false);
                 setPhotoUrl("");
                 setPhotoThumbnailUrl("");
-                getPhotos()
               }} 
               sx={{m: 3, width: '75%'}} 
               variant="contained" 
