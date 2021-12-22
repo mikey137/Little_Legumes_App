@@ -68,9 +68,7 @@ export default function Calendar(){
       thumbnailUrl: photoThumbnailUrl,
       url: photoUrl
     } 
-
     setMomentsSubArray(oldSubArray => [...oldSubArray, photoToAdd])
-    
     axios({
       method: "POST",
       data: {
@@ -85,7 +83,7 @@ export default function Calendar(){
     }).then((res) => {
       console.log(res) 
     });
-};
+  };
 
   const deletePhoto = (moment) => {
     document.getElementById(moment.dateId).style.backgroundImage = ""
@@ -165,6 +163,7 @@ export default function Calendar(){
       let lastMonth = months[months.length-1]
       let newMonth = moment(lastMonth).add(-1,'M').format("MMMM YYYY") 
       setMonths(months.concat(newMonth))
+      console.log(months)
   }
     
   let daysInThisMonth = moment().daysInMonth()
