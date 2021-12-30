@@ -11,7 +11,6 @@ import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
-import Popover from '@mui/material/Popover';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Fab from '@mui/material/Fab';
 import EmailIcon from '@mui/icons-material/Email';
@@ -83,6 +82,7 @@ export default function Calendar(){
       url: photoUrl
     } 
     setMomentsSubArray(oldSubArray => [...oldSubArray, photoToAdd])
+    setUserPhotos(oldUserPhotos => [...oldUserPhotos, photoToAdd])
     axios({
       method: "POST",
       data: {
@@ -412,7 +412,6 @@ export default function Calendar(){
             <Button 
               onClick={() => {
                 addPhoto();
-                getPhotos();
                 handleCloseModal(); 
                 setIsPhotoUploadAlertOpen(false);
                 setPhotoUrl("");
