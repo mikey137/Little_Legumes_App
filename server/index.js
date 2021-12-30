@@ -7,6 +7,7 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
+const nodemailer = require('nodemailer')
 const User = require('./models/User')
 const FamilyMember = require('./models/FamilyMember')
 const Photo = require('./models/Photo')
@@ -135,6 +136,67 @@ app.post("/addphoto", (req, res) => {
             res.send("Photo Added")
         }
     }) 
+})
+
+app.post("/send_mail", cors(), async (req, res) => {
+	try {
+  let emailObject = 
+  req.body.map((photo, index) => (
+    `<div style = 
+      "width: 100%;
+       max-width:500px;
+       height:fit-content;
+       box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+        rgba(60, 64, 67, 0.15) 0px 2px 6px 2px; 
+       display:bolck; 
+       margin:auto;"
+    >
+    <div style = 
+      "background:url(cid:${photo._id});
+       background-repeat: no-repeat;
+       background-position: center;
+       background-size: cover;
+       width: 95%;
+       max-width: 450px;
+       height: 95vw;
+       max-height: 450px;
+       border-radius: 5px;
+       margin-top: 10px;
+       margin-left: auto;
+       margin-right: auto; "
+    >
+    </div>
+    <div style="text-align:center;">${photo.momentCaption}</div>
+    </div>`
+  ))
+
+  let attachmentsArray = []
+  for(let i = 0; i < req.body.length; i++){
+    attachmentsArray.push({
+      path: req.body[i].url,
+      cid: req.body[i]._id
+    })
+  }
+
+	const transport = nodemailer.createTransport({
+		host: process.env.MAIL_HOST,
+		port: process.env.MAIL_PORT,
+		auth: {
+			user: process.env.MAIL_USER,
+			pass: process.env.MAIL_PASS
+		}
+	})
+
+	await transport.sendMail({
+		from: process.env.MAIL_FROM,
+		to: "coachhulmeumb@gmail.com",
+		subject: `${req.body[0].user} has shared moments with you!`,
+    attachments: attachmentsArray,
+		html: `${emailObject}`
+	})
+} catch (err) {
+    console.error(err)
+}
 })
 
 app.get("/user", (req, res) => {

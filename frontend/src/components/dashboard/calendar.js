@@ -11,7 +11,10 @@ import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
+import Popover from '@mui/material/Popover';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import Fab from '@mui/material/Fab';
+import EmailIcon from '@mui/icons-material/Email';
 import axios from 'axios'
 import { apiConfig } from '../../Constants';
 
@@ -45,8 +48,18 @@ export default function Calendar(){
   const [isPhotoUploadAlertOpen, setIsPhotoUploadAlertOpen] = useState(false)
   const [isDailyMomentsDrawOpen, setIsDailyMomentsDrawOpen] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
-
+  const [isEmailPrep, setIsEmailPrep] = useState(false)
+  const [daysToEmail, setDaysToEmail] = useState([])
+  
   let url = apiConfig.url.API_URL
+
+  const handleSendEmail = async (e) => {
+		try {
+			await axios.post(`${url}/send_mail`, daysToEmail)
+		} catch (error) {
+			console.error(error)
+		}
+	}
 
   const getPhotos = () => {
     axios({
@@ -134,7 +147,6 @@ export default function Calendar(){
   }, [])
 
   const mapPhotosToDates = () => {
-    console.log('test')
     for(let i = 0; i < userPhotos.length; i++){
       let photo = userPhotos[i]
       let id = photo.dateId
@@ -161,11 +173,8 @@ export default function Calendar(){
   }
   
   const addMoreMonths = () => {
-    let lastMonth = months[months.length-1]
     let newMonth = moment().add(monthCounter,'M').format("MMMM YYYY") 
-    console.log(newMonth)
     setMonths(months.concat(newMonth))
-    console.log(months)
     setMonthCounter(monthCounter -1)
   }
     
@@ -180,10 +189,10 @@ export default function Calendar(){
     let daysInMonth = []
     for(let d = 1; d <= daysInThisMonth; d++){
       daysInMonth.push(<td 
-          onClick={handleOpenDraw} 
+          onClick={isEmailPrep ? handleAddDayToEmail : handleOpenDraw} 
           key={d} 
           id={`${m}+${d}`} 
-          className={"calendar-day"}
+          className="calendar-day"
         >
           {d}
         </td>
@@ -233,6 +242,21 @@ export default function Calendar(){
   const handleCloseDraw = () => {
     setMomentsSubArray([])
     setIsDailyMomentsDrawOpen(false)
+  }
+
+  const handleAddDayToEmail = (e) => {
+    let id = e.target.id
+    let dayToAdd = userPhotos.filter(photo => photo.dateId === id)
+    setDaysToEmail(daysToEmail.concat(dayToAdd))
+  }
+
+  const handleEmailPrep = (e) => {
+    setIsEmailPrep(true)
+  }
+
+  const handleCancelEmail = (e) => {
+    setDaysToEmail([])
+    setIsEmailPrep(false)
   }
 
   const drawerContent = (anchor) => (
@@ -301,6 +325,44 @@ export default function Calendar(){
   )
 
   return(
+    <div className="scroll-container">
+      <div className="email-outer-wrapper">
+        <Fab 
+          variant="extended" 
+          color="secondary" 
+          aria-label="add"
+          size="small"
+          onClick={handleEmailPrep}
+        >
+        <EmailIcon sx={{ mr: 1 }} />
+        Share Moments
+        </Fab>
+        <div className={isEmailPrep ? "email-content-container" : "hidden"}>
+          <p>Click Dates to Add Photos</p>
+          <div className="moment-thumbnail-container">
+            {daysToEmail.map((day, index) => (
+              <div className="little-calendar-day" style= {{backgroundImage: `url(${day.url})`}}></div>
+            ))}
+          </div>
+          <div className="button-container">
+            <Button 
+              sx={{m: 1, width: '50%', maxWidth: '250px'}} 
+              variant="contained" 
+              onClick={handleSendEmail}
+            >
+              Email Family
+            </Button>
+            <Button 
+              color="info"
+              sx={{m: 1, width: '50%', maxWidth: '250px'}} 
+              variant="contained" 
+              onClick={handleCancelEmail}
+            >
+              Cancel
+            </Button>
+          </div>
+        </div>
+      </div>
     <InfiniteScroll
       dataLength={months.length}
       next={addMoreMonths}
@@ -374,6 +436,7 @@ export default function Calendar(){
         </SwipeableDrawer>
       </div>
        ))} 
-    </InfiniteScroll>    
+    </InfiniteScroll> 
+    </div>   
   )
 }

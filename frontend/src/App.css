@@ -52,6 +52,36 @@ h1 {
 }
 
 /*Calendar Css*/
+.moment-thumbnail-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+.scroll-container {
+  position: relative;
+}
+.email-outer-wrapper {
+  position: sticky;
+  top: 60px;
+  left: 10px;
+  background-color: white;
+}
+.email-content-container {
+  width: 90%;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: 1em;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
+    rgba(0, 0, 0, 0.22) 0px 10px 10px;
+  display: flex;
+  flex-direction: column;
+}
+.button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
 
 .editing-container-display {
   visibility: visible;
@@ -63,6 +93,17 @@ h1 {
 .calendar-day {
   width: 12vw;
   height: 12vw;
+  border-radius: 3px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
+    rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.little-calendar-day {
+  width: 6vw;
+  height: 6vw;
   border-radius: 3px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
     rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
