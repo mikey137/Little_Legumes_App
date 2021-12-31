@@ -17,6 +17,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import axios from 'axios'
 import { apiConfig } from '../../Constants';
 
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -55,7 +56,6 @@ export default function Calendar(){
 
   const handleSendEmail = async (e) => {
 		try {
-      const data = {objects: [daysToEmail, familyEmails, loggedInUser]}
 			await axios.post(`${url}/send_mail`, {photos: daysToEmail, emails: familyEmails, user: loggedInUser})
 		} catch (error) {
 			console.error(error)
@@ -364,7 +364,7 @@ export default function Calendar(){
             <Button 
               sx={{m: 1, width: '50%', maxWidth: '250px'}} 
               variant="contained" 
-              onClick={handleSendEmail}
+              onClick={() => {handleSendEmail(); handleCancelEmail()}}
             >
               Email Family
             </Button>

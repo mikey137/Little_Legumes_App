@@ -12,8 +12,7 @@ import axios from 'axios'
 import { apiConfig } from '../../Constants';
 
 
-export default function AddFAndFForm(handleCloseDraw){
-  console.log(handleCloseDraw)
+export default function AddFAndFForm({toggle}){
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [relationship, setRelationship] = useState("")
@@ -44,6 +43,7 @@ export default function AddFAndFForm(handleCloseDraw){
         url: `${url}/addFamilyMember`,
       }).then((res) => {
         console.log(res)
+        toggle()
       });
   };
 
@@ -92,7 +92,7 @@ export default function AddFAndFForm(handleCloseDraw){
             variant="outlined" 
           />
           <Stack sx={{m:2}}spacing={2} direction="column" justifyContent="center" width="300px">
-            <Button onClick={() => {addFamilyMember(); handleCloseDraw()}} color ="secondary" variant="contained">Add Person</Button>
+            <Button onClick={() => {addFamilyMember()}} color ="secondary" variant="contained">Add Person</Button>
             <Button color = "info" variant="contained">Cancel</Button>
           </Stack>
         </div>

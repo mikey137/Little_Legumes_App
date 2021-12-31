@@ -98,7 +98,13 @@ export default function EditFamilyForm(member){
                   defaultValue={member.member.email}
                 />
                 <Stack sx={{m:2}}spacing={2} direction="column" justifyContent="center" width="300px">
-                    <Button onClick={() => editFamilyMember(member.member._id)} color ="secondary" variant="contained">Update</Button>
+                    <Button 
+                      onClick={() => editFamilyMember(member.member._id)} 
+                      color ="secondary" 
+                      variant="contained"
+                    >
+                      Update
+                    </Button>
                 </Stack>
             </div>
         </ThemeProvider>

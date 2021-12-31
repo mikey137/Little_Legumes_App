@@ -52,6 +52,7 @@ export default function ViewFamily() {
           url: `${url}/deletefamily/${id}`,
         }).then((res) => {
           console.log('family member deleted')
+          getFamilyMembers()
         });
     };
 
@@ -83,7 +84,7 @@ export default function ViewFamily() {
                 >
                     <CloseIcon />
                 </IconButton>
-                {isEdit ? <EditFamilyForm member= {familyMemberToEdit} /> : <AddFAndFForm function= {handleCloseDraw}/>}   
+                {isEdit ? <EditFamilyForm member= {familyMemberToEdit} /> : <AddFAndFForm toggle= {handleCloseDraw}/>}   
             </Box>
         </ThemeProvider>
     )

@@ -60,7 +60,6 @@ app.post("/login", (req, res, next) => {
         req.logIn(user, (err) => {
           if (err) throw err;
           res.send("Successfully Authenticated");
-          console.log(req.user);
         });
       }
     })(req, res, next);
@@ -140,7 +139,6 @@ app.post("/addphoto", (req, res) => {
 
 app.post("/send_mail", cors(), async (req, res) => {
 	try {
-  console.log(req.body.emails[0].email)
   let emailObject = 
   req.body.photos.map((photo, index) => (
     `<div style = 
@@ -184,8 +182,6 @@ app.post("/send_mail", cors(), async (req, res) => {
     mailList.push(req.body.emails[i].email)
   }
 
-  console.log(mailList)
-
 	const transport = nodemailer.createTransport({
 		host: process.env.MAIL_HOST,
 		port: process.env.MAIL_PORT,
@@ -208,7 +204,6 @@ app.post("/send_mail", cors(), async (req, res) => {
 })
 
 app.get("/user", (req, res) => {
-    console.log(req)
     User.findOne({username: req.user.username}, (err, user) => {
         if(err) throw err
         if(user) res.send({
@@ -299,7 +294,6 @@ app.put('/editfamilymember/:id', async (req, res) => {
 })
 
 app.put('/editphoto/:id', async (req, res) => {
-    console.log(req.body)
     try {
         let photo = await Photo.findById(req.params.id).lean()
     
