@@ -45,14 +45,14 @@ export default function ViewFamily() {
     },[])
 
     const deleteFamilyMember = (id) => {
-        console.log(id)
+        let newFamilyMembersArray = familyMembers.filter((member) => member._id !== id)
+        setFamilyMembers(newFamilyMembersArray)
         axios({
           method: "DELETE",
           withCredentials: true,
           url: `${url}/deletefamily/${id}`,
         }).then((res) => {
           console.log('family member deleted')
-          getFamilyMembers()
         });
     };
 
@@ -118,7 +118,7 @@ export default function ViewFamily() {
                         <IconButton aria-label="delete" onClick={() => {setIsEdit(true); handleOpenDraw(); setFamilyMemberToEdit(member) }}>
                             <EditIcon color="secondary" />
                         </IconButton>
-                        <IconButton aria-label="delete" onClick={() => {deleteFamilyMember(member._id); getFamilyMembers()}}>
+                        <IconButton aria-label="delete" onClick={() => {deleteFamilyMember(member._id)}}>
                             <DeleteIcon color="error" />
                         </IconButton>
                     </ListItem> 
