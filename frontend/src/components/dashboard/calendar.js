@@ -49,16 +49,31 @@ export default function Calendar(){
   const [isEditing, setIsEditing] = useState(false)
   const [isEmailPrep, setIsEmailPrep] = useState(false)
   const [daysToEmail, setDaysToEmail] = useState([])
+  const [familyEmails, setFamilyEmails] = useState([])
   
   let url = apiConfig.url.API_URL
 
   const handleSendEmail = async (e) => {
 		try {
-			await axios.post(`${url}/send_mail`, daysToEmail)
+      const data = {objects: [daysToEmail, familyEmails, loggedInUser]}
+			await axios.post(`${url}/send_mail`, {photos: daysToEmail, emails: familyEmails, user: loggedInUser})
 		} catch (error) {
 			console.error(error)
 		}
 	}
+
+  const getFamilyMembers = () => {
+    axios({
+      method: "GET",
+      withCredentials: true,
+      url: `${url}/familymembers`,
+    }).then((res) => {
+      const members = res.data.family
+      console.log(members)
+      setFamilyEmails(members)
+      console.log('Got Family')
+    });
+};
 
   const getPhotos = () => {
     axios({
@@ -144,6 +159,7 @@ export default function Calendar(){
       setLoggedInUser(foundUser.username);
     }
     getPhotos()
+    getFamilyMembers()
   }, [])
 
   const mapPhotosToDates = () => {

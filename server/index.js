@@ -140,8 +140,9 @@ app.post("/addphoto", (req, res) => {
 
 app.post("/send_mail", cors(), async (req, res) => {
 	try {
+  console.log(req.body.emails[0].email)
   let emailObject = 
-  req.body.map((photo, index) => (
+  req.body.photos.map((photo, index) => (
     `<div style = 
       "width: 100%;
        max-width:500px;
@@ -171,12 +172,19 @@ app.post("/send_mail", cors(), async (req, res) => {
   ))
 
   let attachmentsArray = []
-  for(let i = 0; i < req.body.length; i++){
+  for(let i = 0; i < req.body.photos.length; i++){
     attachmentsArray.push({
-      path: req.body[i].url,
-      cid: req.body[i]._id
+      path: req.body.photos[i].url,
+      cid: req.body.photos[i]._id
     })
   }
+
+  let mailList = []
+  for(let i = 0; i< req.body.emails.length; i++){
+    mailList.push(req.body.emails[i].email)
+  }
+
+  console.log(mailList)
 
 	const transport = nodemailer.createTransport({
 		host: process.env.MAIL_HOST,
@@ -189,8 +197,8 @@ app.post("/send_mail", cors(), async (req, res) => {
 
 	await transport.sendMail({
 		from: process.env.MAIL_FROM,
-		to: "coachhulmeumb@gmail.com",
-		subject: `${req.body[0].user} has shared moments with you!`,
+		to: `${mailList}`,
+		subject: `${req.body.user} has shared moments with you!`,
     attachments: attachmentsArray,
 		html: `${emailObject}`
 	})

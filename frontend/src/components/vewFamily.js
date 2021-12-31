@@ -62,6 +62,7 @@ export default function ViewFamily() {
     const handleCloseDraw = (e) => {
         setIsDrawOpen(false)
         setIsEdit(false)
+        getFamilyMembers()
     }
 
     const drawerContent = (anchor) => (
@@ -82,7 +83,7 @@ export default function ViewFamily() {
                 >
                     <CloseIcon />
                 </IconButton>
-                {isEdit ? <EditFamilyForm member= {familyMemberToEdit} /> : <AddFAndFForm />}   
+                {isEdit ? <EditFamilyForm member= {familyMemberToEdit} /> : <AddFAndFForm function= {handleCloseDraw}/>}   
             </Box>
         </ThemeProvider>
     )
