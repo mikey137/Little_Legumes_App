@@ -1,14 +1,9 @@
 import React, { useState } from 'react'
 import TextField from '@mui/material/TextField';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSeedling } from '@fortawesome/free-solid-svg-icons'
 import Button from '@mui/material/Button';
-import { colorTheme } from '../../ThemeContext';
-import { ThemeProvider } from '@mui/material/styles';
 import axios from 'axios'
 import { Navigate } from 'react-router-dom'
 import { apiConfig } from '../../Constants';
-
 
 export default function Register(){
     const [registerFirstName, setRegisterFirstName] = useState("")
@@ -118,23 +113,23 @@ export default function Register(){
         return <Navigate replace to="/Dashboard" />
     }
 
-    return(
-        <ThemeProvider theme={colorTheme}>
-            <div className="form-card">
-                <h1 id="register-title">Register</h1>
-                <FontAwesomeIcon icon={faSeedling} size="5x" inverse />
-                <form className="registration-form">
-                    <TextField error={!isFisrtName} required={true} color="secondary" sx={{width:'90%', m:2 }} id="outlined" label="First Name" variant="outlined" onChange={(e) => setRegisterFirstName(e.target.value)}/>
-                    <TextField error={!isLastName}required={true} color="secondary" sx={{width:'90%', m:2 }} id="outlined" label="Last Name" variant="outlined" onChange={(e) => setRegisterLastName(e.target.value)} />
-                    <TextField className = "email-field" error={!isEmail} type="email" required={true} color="secondary" sx={{width:'90%', m:2 }} id="outlined" label="Email" variant="outlined" onChange={(e) => setRegisterEmail(e.target.value)} />
-                    <div className={isEmailAlertOpen ? 'alert' : 'hidden'}>Must Enter a Valid Email</div>
-                    <TextField error={!isPassword}required={true} color="secondary" sx={{width:'90%', m:2 }} id="outlined" label="Password" variant="outlined" onChange={(e) => setRegisterPassword(e.target.value)} />
-                    <TextField required={true} color="secondary" sx={{width:'90%', m:2 }} id="outlined" label="Verify Password" variant="outlined" onChange={(e) => setRegisterVerifyPassword(e.target.value)}/>
-                    <div className={isPasswordMatchAlertOpen ? 'alert' : 'hidden'}>Passwords Must Match!</div>
-                    <div className={isPasswordStrengthAlertOpen ? 'alert' : 'hidden'}>Passwords Must Be 8 characters and contain a number, symbol, lowercase and capital letter.</div>
-                    <Button type="submit" onClick={(e) => {e.preventDefault(); registerUser()}} color="secondary" sx={{ width: '60%', m: 3 }} variant="contained">Submit</Button>
-                </form>
+    return( 
+        <div className="registration-outer">
+            <div className="registration-img">
+                <h3>Never forget a moment!</h3>
             </div>
-        </ThemeProvider>
+            <form className="registration-form">
+                <h1 id="register-title">Register</h1>
+                <TextField error={!isFisrtName} required={true} color="secondary" sx={{width:'90%', maxWidth: '450px', m:2 }} id="outlined" label="First Name" variant="outlined" onChange={(e) => setRegisterFirstName(e.target.value)}/>
+                <TextField error={!isLastName}required={true} color="secondary" sx={{width:'90%', maxWidth: '450px', m:2 }} id="outlined" label="Last Name" variant="outlined" onChange={(e) => setRegisterLastName(e.target.value)} />
+                <TextField className = "email-field" error={!isEmail} type="email" required={true} color="secondary" sx={{width:'90%', maxWidth: '450px', m:2 }} id="outlined" label="Email" variant="outlined" onChange={(e) => setRegisterEmail(e.target.value)} />
+                <div className={isEmailAlertOpen ? 'alert' : 'hidden'}>Must Enter a Valid Email</div>
+                <TextField error={!isPassword}required={true} color="secondary" sx={{width:'90%', maxWidth: '450px', m:2 }} id="outlined" label="Password" variant="outlined" onChange={(e) => setRegisterPassword(e.target.value)} />
+                <TextField required={true} color="secondary" sx={{width:'90%', maxWidth: '450px', m:2 }} id="outlined" label="Verify Password" variant="outlined" onChange={(e) => setRegisterVerifyPassword(e.target.value)}/>
+                <div className={isPasswordMatchAlertOpen ? 'alert' : 'hidden'}>Passwords Must Match!</div>
+                <div className={isPasswordStrengthAlertOpen ? 'alert' : 'hidden'}>Passwords Must Be 8 characters and contain a number, symbol, lowercase and capital letter.</div>
+                <Button type="submit" onClick={(e) => {e.preventDefault(); registerUser()}} color="primary" sx={{ width: '60%', maxWidth: '250px', m: 3 }} variant="contained">Submit</Button>
+            </form>
+        </div>
     )
 }

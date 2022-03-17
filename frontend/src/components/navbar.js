@@ -12,7 +12,6 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -117,9 +116,9 @@ export default function Navbar() {
     <ThemeProvider theme={colorTheme}>
         <Box sx={{ display: 'flex' }}>
           <CssBaseline />
-          <AppBar position="fixed" open={open}>
+          <AppBar position="fixed" open={open} color='white'>
             <Toolbar>
-              <Typography variant="h6" noWrap sx={{ flexGrow: 1, display: 'flex', flexDirection: 'row', justifyContent: 'start' }} component="div">
+              <Typography variant="h6" noWrap sx={{ flexGrow: 1, display: 'flex', flexDirection: 'row', justifyContent: 'start'}} component="div">
                 <FontAwesomeIcon icon={faSeedling} size="3x" inverse />
                 <div className="text">
                   <h3 className="navbar-title">Little Legumes </h3>
@@ -127,7 +126,7 @@ export default function Navbar() {
                 </div>
               </Typography>
               <IconButton
-                color="inherit"
+                color="brownish"
                 aria-label="open drawer"
                 edge="end"
                 onClick={handleDrawerOpen}
@@ -147,21 +146,23 @@ export default function Navbar() {
             '& .MuiDrawer-paper': {
                 width: drawerWidth,
             },
+            backgroundColor: 'rgb(253,247,236)'
             }}
             variant="persistent"
             anchor="right"
             open={open}
+            
           >
             <DrawerHeader>
               <IconButton onClick={handleDrawerClose}>
-                {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                <ChevronRightIcon color="brownish" />
               </IconButton>
             </DrawerHeader>
             <Divider />
             <List>
               <Link href="/dashboard">
                 <ListItem button>
-                  <ListItemText primary="My Calendar" />
+                  <ListItemText primary="My Calendar" sx={{color: "rgb(52,33,3", textDecoration: "none"}} />
                 </ListItem>
               </Link>
               <Link href="/family">

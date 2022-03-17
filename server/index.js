@@ -8,6 +8,9 @@ const bcrypt = require('bcryptjs')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
 const nodemailer = require('nodemailer')
+const sendgridTransport = require('nodemailer-sendgrid-transport')
+const sgMail = require('@sendgrid/mail')
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 const User = require('./models/User')
 const FamilyMember = require('./models/FamilyMember')
 const Photo = require('./models/Photo')
@@ -139,68 +142,83 @@ app.post("/addphoto", (req, res) => {
 
 app.post("/send_mail", cors(), async (req, res) => {
 	try {
-  let emailObject = 
-  req.body.photos.map((photo, index) => (
-    `<div style = 
-      "width: 100%;
-       max-width:500px;
-       height:fit-content;
-       box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-        rgba(60, 64, 67, 0.15) 0px 2px 6px 2px; 
-       display:bolck; 
-       margin:auto;"
-    >
-    <div style = 
-      "background:url(cid:${photo._id});
-       background-repeat: no-repeat;
-       background-position: center;
-       background-size: cover;
-       width: 95%;
-       max-width: 450px;
-       height: 95vw;
-       max-height: 450px;
-       border-radius: 5px;
-       margin-top: 10px;
-       margin-left: auto;
-       margin-right: auto; "
-    >
-    </div>
-    <div style="text-align:center;">${photo.momentCaption}</div>
-    </div>`
-  ))
+    console.log(req.body.emails)
+    let emailObject = 
+    req.body.photos.map((photo, index) => (
+      `<div style = 
+        "width: 100%;
+        max-width:500px;
+        height:fit-content;
+        box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+          rgba(60, 64, 67, 0.15) 0px 2px 6px 2px; 
+        display:bolck; 
+        margin:auto;"
+      >
+      <div style = 
+        "background:url('${photo.url}');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        width: 95%;
+        max-width: 450px;
+        height: 95vw;
+        max-height: 450px;
+        border-radius: 5px;
+        margin-top: 10px;
+        margin-left: auto;
+        margin-right: auto; "
+      >
+      </div>
+      <div style="text-align:center;">${photo.momentCaption}</div>
+      </div>`
+    ))
 
-  let attachmentsArray = []
-  for(let i = 0; i < req.body.photos.length; i++){
-    attachmentsArray.push({
-      path: req.body.photos[i].url,
-      cid: req.body.photos[i]._id
+    let attachmentsArray = []
+    for(let i = 0; i < req.body.photos.length; i++){
+      attachmentsArray.push({
+        path: req.body.photos[i].url,
+        cid: req.body.photos[i]._id
+      })
+    }
+
+    // let mailList = []
+    // for(let i = 0; i< req.body.emails.length; i++){
+    //   mailList.push(req.body.emails[i].email)
+    //   console.log(mailList)
+    // }
+
+    let mailList = req.body.emails
+
+    const msg ={
+      to: mailList,
+      from: process.env.MAIL_FROM,
+      subject: 'Little Legumes Demo',
+      html: `${emailObject}`
+    }
+
+    sgMail.send(msg).then(() => {
+      console.log("Email Sent")
     })
+    .catch((error) => {
+      console.log(error)
+    })
+
+    // const transport = nodemailer.createTransport(sendgridTransport({
+    //   auth: {
+    //     api_key: SENDGRID_API_KEY
+    //   }
+    // }))
+
+    // await transport.sendMail({
+    //   from: process.env.MAIL_FROM,
+    //   to: mailList,
+    //   subject: 'Little Legumes Demo',
+    //   attachments: attachmentsArray,
+    //   html: `${emailObject}`
+    // })
+  } catch (err) {
+      console.error(err)
   }
-
-  let mailList = []
-  for(let i = 0; i< req.body.emails.length; i++){
-    mailList.push(req.body.emails[i].email)
-  }
-
-	const transport = nodemailer.createTransport({
-		host: process.env.MAIL_HOST,
-		port: process.env.MAIL_PORT,
-		auth: {
-			user: process.env.MAIL_USER,
-			pass: process.env.MAIL_PASS
-		}
-	})
-
-	await transport.sendMail({
-		from: process.env.MAIL_FROM,
-		to: `${mailList}`,
-		subject: `${req.body.user} has shared moments with you!`,
-    attachments: attachmentsArray,
-		html: `${emailObject}`
-	})
-} catch (err) {
-    console.error(err)
-}
 })
 
 app.get("/user", (req, res) => {
