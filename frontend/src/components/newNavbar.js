@@ -1,7 +1,6 @@
 import React, { useState, Fragment } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSeedling, faBars, faChevronRight } from '@fortawesome/free-solid-svg-icons'
-import { Navigate } from 'react-router-dom'
 import axios from 'axios'
 import { apiConfig } from '../Constants'
 

@@ -79,9 +79,6 @@ export default function Login({ isLoggedIn, setIsLoggedIn }){
     <div className="landing-outer">
       <div className="landing-background"></div>
       <div className="landing-overlay"></div>
-      <div className="landing-text">
-          Share and track all your kids precious moments!
-      </div>
       <div className="login-container">
         <TextField 
           onChange={(e) => setLoginEmail(e.target.value)} 

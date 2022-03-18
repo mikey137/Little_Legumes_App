@@ -29,7 +29,8 @@ const style = {
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'flex-start',
-  alignItems: 'center'
+  alignItems: 'center',
+  FocusEvent: 'none'
 };
 
 export default function TransitionsModal({ isModalOpen, setIsModalOpen, momentsSubArray, setMomentsSubArray, demoPhotos, setDemoPhotos, dateId, setDateId }) {
@@ -54,7 +55,7 @@ export default function TransitionsModal({ isModalOpen, setIsModalOpen, momentsS
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"
           open={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={() => {setIsModalOpen(false); setIsEditing(false)}}
           closeAfterTransition
           BackdropComponent={Backdrop}
           BackdropProps={{
@@ -65,7 +66,7 @@ export default function TransitionsModal({ isModalOpen, setIsModalOpen, momentsS
             <Box sx={style}>
               <CloseIcon 
                 sx={{position: 'absolute', top: '10px', left: '10px', cursor: 'pointer'}}
-                onClick={() => setIsModalOpen(false)}
+                onClick={() => {setIsModalOpen(false); setIsEditing(false)}}
               />
               <CloudinaryWidget
                 momentsSubArray = { momentsSubArray }
@@ -110,7 +111,7 @@ export default function TransitionsModal({ isModalOpen, setIsModalOpen, momentsS
                     <IconButton 
                       aria-label="edit" 
                       onClick={() => setIsEditing(true)} >
-                      <EditIcon color="secondary" />
+                      <EditIcon color="brownish" />
                     </IconButton>
                     <IconButton 
                       aria-label="delete" 
