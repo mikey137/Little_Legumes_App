@@ -110,7 +110,7 @@ export default function Register(){
       }
 
     if(isRegistered){
-        return <Navigate replace to="/Dashboard" />
+        return <Navigate replace to="/calendar" />
     }
 
     return( 

@@ -11,52 +11,52 @@ const d = new Date();
 const demoPhotoArray = [
   {
     url: 'https://images.unsplash.com/photo-1540479859555-17af45c78602?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-    dateId: `${month[d.getMonth()] +' '+ d.getFullYear()}+${d.getDate()-1}`,
+    dateId: `${month[d.getMonth()] +' '+ d.getFullYear()}+1`,
     momentCaption: 'Walking in the rain with friends!'
   },
   {
     url: 'https://images.unsplash.com/photo-1607453998774-d533f65dac99?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80',
-    dateId: `${month[d.getMonth()] +' '+ d.getFullYear()}+${d.getDate()-2}`,
+    dateId: `${month[d.getMonth()] +' '+ d.getFullYear()}+2`,
     momentCaption: 'Hanging on the porch with cousins!'
   },
   {
     url: 'https://images.unsplash.com/photo-1537655780520-1e392ead81f2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-    dateId: `${month[d.getMonth()] +' '+ d.getFullYear()}+${d.getDate()-3}`,
+    dateId: `${month[d.getMonth()] +' '+ d.getFullYear()}+3`,
     momentCaption: 'Playing with blocks!'
   },
   {
     url: 'https://images.unsplash.com/photo-1551966775-a4ddc8df052b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8a2lkc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
-    dateId: `${month[d.getMonth()] +' '+ d.getFullYear()}+${d.getDate()-4}`,
+    dateId: `${month[d.getMonth()] +' '+ d.getFullYear()}+4`,
     momentCaption: 'Hiding behind ballons!'
   },
   {
     url: 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80',
-    dateId: `${month[d.getMonth()] +' '+ d.getFullYear()}+${d.getDate()-5}`,
+    dateId: `${month[d.getMonth()] +' '+ d.getFullYear()}+5`,
     momentCaption: 'First day at daycare!'
   },
   {
     url: 'https://images.unsplash.com/photo-1485546246426-74dc88dec4d9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2069&q=80',
-    dateId: `${month[d.getMonth()] +' '+ d.getFullYear()}+${d.getDate()-6}`,
+    dateId: `${month[d.getMonth()] +' '+ d.getFullYear()}+6`,
     momentCaption: 'Shocked they killed Ned!'
   },
   {
     url: 'https://images.unsplash.com/photo-1531325082793-ca7c9db6a4c1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-    dateId: `${month[d.getMonth()] +' '+ d.getFullYear()}+${d.getDate()-7}`,
+    dateId: `${month[d.getMonth()] +' '+ d.getFullYear()}+7`,
     momentCaption: 'Party at the beach!'
   },
   {
     url: 'https://images.unsplash.com/photo-1555009393-f20bdb245c4d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80',
-    dateId: `${month[d.getMonth()] +' '+ d.getFullYear()}+${d.getDate()-8}`,
+    dateId: `${month[d.getMonth()] +' '+ d.getFullYear()}+8`,
     momentCaption: 'Watering some plants!'
   },
   {
     url: 'https://images.unsplash.com/photo-1552873816-636e43209957?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2831&q=80',
-    dateId: `${month[d.getMonth()] +' '+ d.getFullYear()}+${d.getDate()-9}`,
+    dateId: `${month[d.getMonth()] +' '+ d.getFullYear()}+9`,
     momentCaption: 'Lost two teeth!'
   },
   {
     url: 'https://images.unsplash.com/photo-1476234251651-f353703a034d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjF8fGtpZHN8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60',
-    dateId: `${month[d.getMonth()] +' '+ d.getFullYear()}+${d.getDate()-10}`,
+    dateId: `${month[d.getMonth()] +' '+ d.getFullYear()}+10`,
     momentCaption: 'Reading at the park!'
   },
 ]
@@ -71,6 +71,7 @@ export default function DemoCalendar(){
   const [demoPhotos, setDemoPhotos] = useState(demoPhotoArray)
   
   const mapPhotosToDates = () => {
+    console.log("running")
     for(let i = 0; i < demoPhotos.length; i++){
       let photo = demoPhotos[i]
       let id = photo.dateId
@@ -116,15 +117,14 @@ export default function DemoCalendar(){
     }
     let daysInMonth = []
     for(let d = 1; d <= daysInThisMonth; d++){
-      daysInMonth.push(<td  
+      daysInMonth.push(<td 
           key={d} 
-          id={`${m}+${d}`} 
+          id={`${m}+${d}`}
           className="calendar-day"
           onClick={isEmailPrep ? handleAddDayToEmail :handleOpenModal}
         >
           {d}
         </td>
-        
       )
     }
     let totalSlots = blanks.concat(daysInMonth)

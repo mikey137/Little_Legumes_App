@@ -49,7 +49,6 @@ export default function EmailFab({ isEmailPrep, setIsEmailPrep, daysToEmail, set
     const handleSendEmail = async (e) => {
 		try {
 			await axios.post(`${url}/send_mail`, {photos: daysToEmail, emails: emailAddress,})
-            await handleCancelEmail()
 		} catch (err) {
 			console.error(err)
 		}
