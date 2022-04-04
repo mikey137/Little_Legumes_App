@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import Navbar from './navbar'
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -91,7 +90,6 @@ export default function ViewFamily() {
 
   return (
     <div>
-        <Navbar />
         <ThemeProvider theme={colorTheme} >
             <div className="list-container">
                 <h2 className="family-list-title">Friends and Family</h2>

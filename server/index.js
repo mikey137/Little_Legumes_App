@@ -10,13 +10,15 @@ const MongoStore = require('connect-mongo')
 const nodemailer = require('nodemailer')
 const sendgridTransport = require('nodemailer-sendgrid-transport')
 const sgMail = require('@sendgrid/mail')
-sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+sgMail.setApiKey(process.env.SENDGRID_API_KEY_TWO)
 const User = require('./models/User')
 const FamilyMember = require('./models/FamilyMember')
 const Photo = require('./models/Photo')
 const path = require('path')
 const { corsOrigin } = require('./CorsOrigins')
 let originUrl = corsOrigin.url.API_URL
+
+console.log(process.env.SENDGRID_API_KEY_TWO)
 
 mongoose.connect(
     "mongodb+srv://mhulme:SThendy137!@cluster0.aq0gb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",

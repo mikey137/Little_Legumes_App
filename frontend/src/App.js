@@ -3,7 +3,7 @@ import React, { useState} from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Register from './components/forms/register';
 import Calendar from './components/calendar';
-import ViewFamily from './components/vewFamily'
+import ViewFamily from './components/viewFamily'
 import Landing from './components/landing';
 import Login from './components/login';
 import DemoCalendar from './components/demo';

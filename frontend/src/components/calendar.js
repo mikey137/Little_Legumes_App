@@ -167,7 +167,10 @@ export default function Calendar(){
       let photo = userPhotos[i]
       let id = photo.dateId
       let thumbnail = photo.url
-      document.getElementById(id).style.backgroundImage = `url(${thumbnail})`
+      let day = document.getElementById(id)
+      if(day){
+        day.style.backgroundImage = `url(${thumbnail})`
+      }
     }
   }
 
@@ -192,6 +195,7 @@ export default function Calendar(){
     let newMonth = moment().add(monthCounter,'M').format("MMMM YYYY") 
     setMonths(months.concat(newMonth))
     setMonthCounter(monthCounter -1)
+    mapPhotosToDates()
   }
     
   let daysInThisMonth = moment().daysInMonth()
