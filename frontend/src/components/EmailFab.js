@@ -48,7 +48,23 @@ export default function EmailFab({ isEmailPrep, setIsEmailPrep, daysToEmail, set
 
     const handleSendEmail = async (e) => {
 		try {
-			await axios.post(`${url}/send_mail`, {photos: daysToEmail, emails: emailAddress,})
+            setSuccess(false)
+            setLoading(true)
+
+			const response = await axios.post(`${url}/send_mail`, 
+                {photos: daysToEmail, emails: emailAddress,}
+            )
+
+           if(response.data === 'Email Sent'){
+                setSuccess(true)
+                setLoading(false)
+                setTimeout(() => {
+                    setDaysToEmail([])
+                    setIsEmailPrep(false)
+                    setEmailAddress([])
+                    setSuccess(false)
+                },2000)
+           }
 		} catch (err) {
 			console.error(err)
 		}

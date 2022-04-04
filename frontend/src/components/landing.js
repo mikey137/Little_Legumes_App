@@ -10,13 +10,7 @@ export default function Landing(){
                 Share and track all your kids precious moments!
             </div>
             <div className="landing-btn-container">
-                <Button 
-                    variant="contained" 
-                    sx={{ m: 1, width: '25ch' }} 
-                    color="primary"
-                >
-                    <a href="/demo">View Demo</a> 
-                </Button>
+                <a href="/demo"><h2>VIEW DEMO</h2></a> 
             </div>
         </div>
     )
