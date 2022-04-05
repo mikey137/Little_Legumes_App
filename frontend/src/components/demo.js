@@ -69,7 +69,7 @@ export default function DemoCalendar(){
   const [daysToEmail, setDaysToEmail] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [demoPhotos, setDemoPhotos] = useState(demoPhotoArray)
-  
+
   const mapPhotosToDates = () => {
     console.log("running")
     for(let i = 0; i < demoPhotos.length; i++){

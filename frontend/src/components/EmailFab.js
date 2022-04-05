@@ -24,7 +24,7 @@ export default function EmailFab({ isEmailPrep, setIsEmailPrep, daysToEmail, set
             bgcolor: green[700],
           },
         }),
-      };
+    };
     
       useEffect(() => {
     return () => {

@@ -24,7 +24,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login isLoggedIn = {isLoggedIn} setIsLoggedIn={ setIsLoggedIn } />} />
-          <Route path="/Register" element={<Register />} />
+          <Route path="/Register" element={<Register isLoggedIn = {isLoggedIn} setIsLoggedIn={ setIsLoggedIn }/>} />
           <Route path="/demo" element={<DemoCalendar />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/family" element={<ViewFamily />} />
