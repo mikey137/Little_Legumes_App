@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useState} from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Register from './components/forms/register';
 import Calendar from './components/calendar';
 import ViewFamily from './components/viewFamily'
@@ -22,12 +22,29 @@ function App() {
       <BrowserRouter>
         <NewNavbar isLoggedIn = {isLoggedIn} setIsLoggedIn={ setIsLoggedIn } />
         <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/login" element={<Login isLoggedIn = {isLoggedIn} setIsLoggedIn={ setIsLoggedIn } />} />
-          <Route path="/Register" element={<Register isLoggedIn = {isLoggedIn} setIsLoggedIn={ setIsLoggedIn }/>} />
-          <Route path="/demo" element={<DemoCalendar />} />
-          <Route path="/calendar" element={<Calendar />} />
-          <Route path="/family" element={<ViewFamily />} />
+          <Route 
+            path="/" 
+            element={<Landing />} 
+          />
+          <Route 
+            path="/login"   
+            element={<Login isLoggedIn = {isLoggedIn} setIsLoggedIn={ setIsLoggedIn } />} 
+          />
+          <Route 
+            path="/Register" 
+            element={<Register isLoggedIn = {isLoggedIn} setIsLoggedIn={ setIsLoggedIn }/>} 
+          />
+          <Route 
+            path="/demo" 
+            element={<DemoCalendar />} 
+          />
+          <Route 
+            path="/calendar"  
+            element={isLoggedIn ? <Calendar /> : <Navigate to="/login" />} 
+          />
+          <Route 
+            path="/family" 
+            element={isLoggedIn ? <ViewFamily /> : <Navigate to="/login" />} />
         </Routes>
       </BrowserRouter> 
     </ThemeProvider> 
