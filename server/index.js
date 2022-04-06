@@ -16,6 +16,8 @@ const FamilyMember = require('./models/FamilyMember')
 const Photo = require('./models/Photo')
 const path = require('path')
 const { corsOrigin } = require('./CorsOrigins')
+const jwtGenerator = require('./utils/jwtGenerator')
+const authorize = require('./middleware/authorize')
 let originUrl = corsOrigin.url.API_URL
 
 mongoose.connect(
@@ -55,6 +57,7 @@ app.use(passport.session({
 }));
 
 app.options('*', cors())
+
 app.post("/login", (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
       if (err) throw err;
@@ -62,7 +65,8 @@ app.post("/login", (req, res, next) => {
       else {
         req.logIn(user, (err) => {
           if (err) throw err;
-          res.send("Successfully Authenticated");
+          const jwtToken = jwtGenerator(user.username)
+          res.json({jwtToken})
         });
       }
     })(req, res, next);
@@ -72,6 +76,15 @@ app.get('/logout', function(req, res){
     req.logout();
     res.send("Logged Out")
   });
+
+app.post('/verifylogin', authorize, (req,res) => {
+  try {
+    res.json(true)
+  } catch (err) {
+    console.error(err.message)
+    res.status(500).send("Server error")
+  }
+} )
 
 app.post('/api/upload', async (req, res) => {
     try {
@@ -99,7 +112,10 @@ app.post("/register", (req, res) => {
           password: hashedPassword,
         });
         await newUser.save();
-        res.send("User Created");
+
+        const token = jwtGenerator(newUser.username)
+
+        res.json({token})
       }
     });
 });
@@ -222,8 +238,9 @@ app.post("/send_mail", cors(), async (req, res) => {
   }
 })
 
-app.get("/user", (req, res) => {
-    User.findOne({username: req.user.username}, (err, user) => {
+app.get("/user",authorize, (req, res) => {
+  console.log(req.username)
+    User.findOne({username: req.user}, (err, user) => {
         if(err) throw err
         if(user) res.send({
             firstName: user.firstName,

@@ -14,7 +14,7 @@ import axios from 'axios'
 import { Navigate } from 'react-router-dom'
 import { apiConfig } from '../Constants';
 
-export default function Login({ isLoggedIn, setIsLoggedIn }){
+export default function Login({ setLoginStatus }){
   const [loginEmail, setLoginEmail] = useState("")
   const [loginPassword, setLoginPassword] = useState("")
   const [isNoUserAlertOpen, setIsNoUserAlertOpen] = useState(false)
@@ -40,40 +40,29 @@ export default function Login({ isLoggedIn, setIsLoggedIn }){
     event.preventDefault();
   };
 
-  const login = () => {
-    axios({
-      method: "POST",
-      data: {
-        username: loginEmail,
-        password: loginPassword,
-      },
-      withCredentials: true,
-      url: `${url}/login`,
-    }).then((res) => {
-      console.log(res)
-      if(res.data === 'Successfully Authenticated'){
-        getUser()
-      }  
-      if(res.data === "No User Exists"){
-        setIsNoUserAlertOpen(true)
+  const login = async() => {
+    try {
+      const response = await axios({
+        method: "POST",
+        data: {
+          username: loginEmail,
+          password: loginPassword,
+        },
+        withCredentials: true,
+        url: `${url}/login`,
+      })
+
+      const token = await response.data.jwtToken
+      console.log(token)
+
+      if(token){
+        localStorage.setItem("token", token)
+        setLoginStatus(true)
       }
-    });
+    } catch (err) {
+      console.log(err.message)
+    }
   };
-
-  const getUser = () => {
-    axios({
-      method: "GET",
-      withCredentials: true,
-      url: `${url}/user`,
-    }).then((res) => {
-      localStorage.setItem('user', JSON.stringify(res.data))
-      setIsLoggedIn(true)
-    });
-  };
-
-  if(isLoggedIn){
-    return <Navigate replace to="/calendar" />
-  }
 
   return(
     <div className="landing-outer">

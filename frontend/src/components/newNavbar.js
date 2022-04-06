@@ -5,9 +5,9 @@ import axios from 'axios'
 import { apiConfig } from '../Constants'
 
 
-export default function NewNavbar({isLoggedIn, setIsLoggedIn}){
+export default function NewNavbar({ isLoggedIn, setLoginStatus }){
     const [isNavMenuOpen, setIsNavMenuOpen] = useState(false)
-
+    
     let url = apiConfig.url.API_URL
 
     const handleLogout = () => {
@@ -18,7 +18,7 @@ export default function NewNavbar({isLoggedIn, setIsLoggedIn}){
         }).then((res) => {
           localStorage.clear()
           sessionStorage.clear()
-          setIsLoggedIn(false)
+          setLoginStatus(false)
         })
       };
 
@@ -45,7 +45,7 @@ export default function NewNavbar({isLoggedIn, setIsLoggedIn}){
                 {isLoggedIn ? 
                     <Fragment>
                         <li className="navbar-menu-item">   
-                            <a href="/viewfamily">View Family</a>
+                            <a href="/family">View Family</a>
                         </li>
                         <li className="navbar-menu-item">   
                             <a href="/calendar">My Calendar</a>

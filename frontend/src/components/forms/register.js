@@ -5,7 +5,7 @@ import axios from 'axios'
 import { Navigate } from 'react-router-dom'
 import { apiConfig } from '../../Constants';
 
-export default function Register({isLoggedIn, setIsLoggedIn}){
+export default function Register({ setLoginStatus }){
     const [registerFirstName, setRegisterFirstName] = useState("")
     const [registerLastName, setRegisterLastName] = useState("")
     const [registerPassword, setRegisterPassword] = useState("")
@@ -19,6 +19,7 @@ export default function Register({isLoggedIn, setIsLoggedIn}){
     const [isEmailAlertOpen, setIsEmailAlertOpen] = useState(false)
     const [isPasswordMatchAlertOpen, setIsPasswordMatchAlertOpen] = useState(false)
     const [isPasswordStrengthAlertOpen, setIsPasswordStrengthAlertOpen] = useState(false)
+    const [isUserExistsAlertOpen, setIsUserExistsAlertOpen] = useState(false)
 
     let url = apiConfig.url.API_URL
 
@@ -104,9 +105,17 @@ export default function Register({isLoggedIn, setIsLoggedIn}){
                 withCredentials: true,
                 url: `${url}/register`
             })
-            if(response.data === 'User Created'){
-                setIsLoggedIn(true)
-            }  
+            console.log(response)
+            const token = await response.data.token
+
+            if(token){
+                localStorage.setItem("token", token)
+                setLoginStatus(true)
+            }
+
+            if(response.data === 'User Already Exists'){
+                setIsUserExistsAlertOpen(true)
+            }
         } catch (err) {
             console.error(err)
         }   
@@ -117,10 +126,6 @@ export default function Register({isLoggedIn, setIsLoggedIn}){
             registerUser()
         }
     },[isFormComplete])
-
-    if(isLoggedIn){
-        return <Navigate replace to="/calendar" />
-    }
 
     return( 
         <div className="registration-outer">
@@ -188,6 +193,9 @@ export default function Register({isLoggedIn, setIsLoggedIn}){
                 </div>
                 <div className={isPasswordStrengthAlertOpen ? 'alert' : 'hidden'}>
                     Passwords Must Be 8 characters and contain a number, symbol, lowercase and capital letter.
+                </div>
+                <div className={isUserExistsAlertOpen ? 'alert' : 'hidden'}>
+                    User Already Exists! 
                 </div>
                 <Button 
                     type="submit" 

@@ -54,13 +54,31 @@ export default function Calendar(){
   
   let url = apiConfig.url.API_URL
 
-  const handleSendEmail = async (e) => {
-		try {
-			await axios.post(`${url}/send_mail`, {photos: daysToEmail, emails: familyEmails, user: loggedInUser})
-		} catch (error) {
-			console.error(error)
-		}
-	}
+  useEffect(() => {
+    getUser()
+  },[])
+
+  useEffect(() => {
+    if(loggedInUser !== ""){
+      getFamilyMembers()
+      getPhotos()
+    }
+  },[loggedInUser])
+
+  useEffect(() => {
+    mapPhotosToDates()
+  },[userPhotos])
+
+  const getUser = () => {
+    axios({
+      method: "GET",
+      withCredentials: true,
+      url: `${url}/user`,
+      headers: { jwt_token: localStorage.token }
+    }).then((res) => {
+      setLoggedInUser(res.data.username)
+    });
+  };
 
   const getFamilyMembers = () => {
     axios({
@@ -87,6 +105,26 @@ export default function Calendar(){
       console.log(res)
     });
   };
+
+  const mapPhotosToDates = () => {
+    for(let i = 0; i < userPhotos.length; i++){
+      let photo = userPhotos[i]
+      let id = photo.dateId
+      let thumbnail = photo.url
+      let day = document.getElementById(id)
+      if(day){
+        day.style.backgroundImage = `url(${thumbnail})`
+      }
+    }
+  }
+
+  const handleSendEmail = async (e) => {
+		try {
+			await axios.post(`${url}/send_mail`, {photos: daysToEmail, emails: familyEmails, user: loggedInUser})
+		} catch (error) {
+			console.error(error)
+		}
+	}
 
   const addPhoto = () => {
     let photoToAdd = {
@@ -152,31 +190,15 @@ export default function Calendar(){
     });
   };
 
-  useEffect(() => {
-    const loggedInUser = localStorage.getItem("user");
-    if (loggedInUser) {
-      const foundUser = JSON.parse(loggedInUser);
-      setLoggedInUser(foundUser.username);
-    }
-    getPhotos()
-    getFamilyMembers()
-  }, [])
-
-  const mapPhotosToDates = () => {
-    for(let i = 0; i < userPhotos.length; i++){
-      let photo = userPhotos[i]
-      let id = photo.dateId
-      let thumbnail = photo.url
-      let day = document.getElementById(id)
-      if(day){
-        day.style.backgroundImage = `url(${thumbnail})`
-      }
-    }
-  }
-
-  useEffect(() => {
-    mapPhotosToDates()
-  },[userPhotos])
+  // useEffect(() => {
+  //   const loggedInUser = localStorage.getItem("user");
+  //   if (loggedInUser) {
+  //     const foundUser = JSON.parse(loggedInUser);
+  //     setLoggedInUser(foundUser.username);
+  //   }
+  //   getPhotos()
+  //   getFamilyMembers()
+  // }, [])
 
   const addPhotoInfoToModal = (id) => {
     let subArray = userPhotos.filter(photo => photo.dateId === id)
