@@ -98,7 +98,7 @@ export default function TransitionsModal({ isModalOpen, setIsModalOpen, momentsS
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"
           open={isModalOpen}
-          onClose={() => {setIsModalOpen(false); setIsEditing(false)}}
+          onClose={() => {setIsModalOpen(false); setIsEditing(false); }}
           closeAfterTransition
           BackdropComponent={Backdrop}
           BackdropProps={{
