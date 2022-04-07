@@ -77,7 +77,7 @@ app.get('/logout', function(req, res){
     res.send("Logged Out")
   });
 
-app.post('/verifylogin', authorize, (req,res) => {
+app.post('/verifylogin', authorize, (req, res) => {
   try {
     res.json(true)
   } catch (err) {

@@ -19,6 +19,7 @@ export default function NewNavbar({ isLoggedIn, setLoginStatus }){
           localStorage.clear()
           sessionStorage.clear()
           setLoginStatus(false)
+          setIsNavMenuOpen(false)
         })
       };
 
@@ -45,10 +46,10 @@ export default function NewNavbar({ isLoggedIn, setLoginStatus }){
                 {isLoggedIn ? 
                     <Fragment>
                         <li className="navbar-menu-item">   
-                            <a href="/family">View Family</a>
+                            <a href="/family" onClick={() => setIsNavMenuOpen(false)}>View Family</a>
                         </li>
                         <li className="navbar-menu-item">   
-                            <a href="/calendar">My Calendar</a>
+                            <a href="/calendar" onClick={() => setIsNavMenuOpen(false)}>My Calendar</a>
                         </li>
                         <li className="navbar-menu-item" onClick={handleLogout}>   
                             Logout
@@ -57,13 +58,13 @@ export default function NewNavbar({ isLoggedIn, setLoginStatus }){
                     :
                     <Fragment>
                         <li className="navbar-menu-item">   
-                            <a href="/login">Login</a>
+                            <a href="/login" onClick={() => setIsNavMenuOpen(false)}>Login</a>
                         </li>
                         <li className="navbar-menu-item">
-                            <a href="/register">Register</a>
+                            <a href="/register" onClick={() => setIsNavMenuOpen(false)}>Register</a>
                         </li>
                         <li className="navbar-menu-item">
-                            <a href="/demo">View Demo</a>
+                            <a href="/demo" onClick={() => setIsNavMenuOpen(false)}>View Demo</a>
                         </li>
                     </Fragment>
                 }

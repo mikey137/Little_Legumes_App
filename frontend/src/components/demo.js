@@ -68,12 +68,12 @@ export default function DemoCalendar(){
   const [isEmailPrep, setIsEmailPrep] = useState(false)
   const [daysToEmail, setDaysToEmail] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [demoPhotos, setDemoPhotos] = useState(demoPhotoArray)
+  const [userPhotos, setUserPhotos] = useState(demoPhotoArray)
 
   const mapPhotosToDates = () => {
     console.log("running")
-    for(let i = 0; i < demoPhotos.length; i++){
-      let photo = demoPhotos[i]
+    for(let i = 0; i < userPhotos.length; i++){
+      let photo = userPhotos[i]
       let id = photo.dateId
       let thumbnail = photo.url
       document.getElementById(id).style.backgroundImage = `url(${thumbnail})`
@@ -82,10 +82,10 @@ export default function DemoCalendar(){
 
   useEffect(() => {
     mapPhotosToDates()
-  },[demoPhotos])
+  },[userPhotos])
 
   const addPhotoInfoToModal = (id) => {
-    let subArray = demoPhotos.filter(photo => photo.dateId === id)
+    let subArray = userPhotos.filter(photo => photo.dateId === id)
     setMomentsSubArray(subArray)
   }
  
@@ -97,7 +97,7 @@ export default function DemoCalendar(){
 
   const handleAddDayToEmail = (e) => {
     let id = e.target.id
-    let dayToAdd = demoPhotos.filter(photo => photo.dateId === id)
+    let dayToAdd = userPhotos.filter(photo => photo.dateId === id)
     setDaysToEmail(daysToEmail.concat(dayToAdd))
   }
 
@@ -154,8 +154,8 @@ export default function DemoCalendar(){
         isModalOpen = { isModalOpen} 
         setIsModalOpen = { setIsModalOpen }
         momentsSubArray = { momentsSubArray }
-        demoPhotos = { demoPhotos }
-        setDemoPhotos = { setDemoPhotos }
+        userPhotos = { userPhotos }
+        setUserPhotos = { setUserPhotos }
         setMomentsSubArray = { setMomentsSubArray }
         dateId = { dateId }
         setDateId = { setDateId }

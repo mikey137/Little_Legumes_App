@@ -13,6 +13,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { colorTheme } from "../ThemeContext";
 import { ThemeProvider } from "@mui/material";
 import CloudinaryWidget from './CloudinaryWidget';
+import axios from 'axios';
+import { apiConfig } from '../Constants';
 
 const style = {
   position: 'absolute',
@@ -33,19 +35,60 @@ const style = {
   FocusEvent: 'none'
 };
 
-export default function TransitionsModal({ isModalOpen, setIsModalOpen, momentsSubArray, setMomentsSubArray, demoPhotos, setDemoPhotos, dateId, setDateId }) {
+export default function TransitionsModal({ isModalOpen, setIsModalOpen, momentsSubArray, setMomentsSubArray, userPhotos, setUserPhotos, dateId, isThisDemo, loggedInUser, getPhotos }) {
   const [isEditing, setIsEditing] = useState(false)
   const [momentCaption, setMomentCaption] = useState("")
 
+  let url = apiConfig.url.API_URL
+
   const deletePhoto = (moment) => {
-    document.getElementById(moment.dateId).style.backgroundImage = ""
-    setMomentsSubArray(momentsSubArray.filter((photo) => photo.url !== moment.url))
-    setDemoPhotos(demoPhotos.filter((photo) => photo.url !== moment.url))
+    if(isThisDemo){
+      document.getElementById(moment.dateId).style.backgroundImage = ""
+      setMomentsSubArray(momentsSubArray.filter((photo) => photo.url !== moment.url))
+      setUserPhotos(userPhotos.filter((photo) => photo.url !== moment.url))
+    }else{
+      document.getElementById(moment.dateId).style.backgroundImage = ""
+
+      let newUserPhotosArray = userPhotos.filter((photo) => photo._id !== moment._id)
+      setUserPhotos(newUserPhotosArray)
+      
+      let newSubArray = momentsSubArray.filter((photo) => photo._id !== moment._id)
+      setMomentsSubArray(newSubArray)
+
+      axios({
+        method: "DELETE",
+        withCredentials: true,
+        url: `${url}/deletephoto/${moment._id}`,
+      }).then((res) => {
+        console.log('photo deleted')
+      });
+    }
   }
 
   const editCaption = (moment) => {
-    moment.momentCaption = momentCaption
-    setIsEditing(false)
+    if(isThisDemo){
+      moment.momentCaption = momentCaption
+      setIsEditing(false)
+    }else{
+      moment.momentCaption = momentCaption
+      axios({
+        method: "PUT",
+        data: {
+          user: moment.loggedInUser,
+          dateId: moment.dateId,
+          momentCaption: momentCaption,
+          thumbnailUrl: moment.photoThumbnailUrl,
+          url: moment.photoUrl
+        },
+        withCredentials: true,
+        url: `${url}/editphoto/${moment._id}`,
+      }).then((res) => {
+        console.log(res) 
+        if(res.data === "Photo Edit Completed"){
+          setIsEditing(false)
+        }
+      });
+    }
   }
 
   return (
@@ -71,9 +114,12 @@ export default function TransitionsModal({ isModalOpen, setIsModalOpen, momentsS
               <CloudinaryWidget
                 momentsSubArray = { momentsSubArray }
                 setMomentsSubArray = { setMomentsSubArray }  
-                demoPhotos = { demoPhotos }
-                setDemoPhotos = { setDemoPhotos } 
+                userPhotos = { userPhotos }
+                setUserPhotos = { setUserPhotos } 
                 dateId = { dateId }
+                loggedInUser = { loggedInUser }
+                isThisDemo = { isThisDemo}
+                getPhotos = { getPhotos }
               />
               <Typography id="transition-modal-title" variant="h6" component="h2">
                 Photos From Today
