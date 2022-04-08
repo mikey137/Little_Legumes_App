@@ -105,11 +105,9 @@ export default function Register({ setLoginStatus }){
                 url: `${url}/register`
             })
             console.log(response)
-            const token = await response.data.token
-
-            if(token){
-                localStorage.setItem("token", token)
-                setLoginStatus(true)
+            
+            if(response.data === "New User Created"){
+                login()
             }
 
             if(response.data === 'User Already Exists'){
@@ -119,6 +117,31 @@ export default function Register({ setLoginStatus }){
             console.error(err)
         }   
     }
+
+    const login = async() => {
+        console.log('test')
+        try {
+          const response = await axios({
+            method: "POST",
+            data: {
+              username: registerEmail,
+              password: registerPassword,
+            },
+            withCredentials: true,
+            url: `${url}/login`,
+          })
+    
+          const token = await response.data.jwtToken
+          console.log(token)
+    
+          if(token){
+            localStorage.setItem("token", token)
+            setLoginStatus(true)
+          }
+        } catch (err) {
+          console.log(err.message)
+        }
+      };
 
     useEffect(() => {
         if(isFormComplete){

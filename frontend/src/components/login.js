@@ -54,6 +54,10 @@ export default function Login({ setLoginStatus }){
       const token = await response.data.jwtToken
       console.log(token)
 
+      if(response.data === 'No User Exists'){
+        setIsNoUserAlertOpen(true)
+      }
+
       if(token){
         localStorage.setItem("token", token)
         setLoginStatus(true)

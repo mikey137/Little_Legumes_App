@@ -113,9 +113,7 @@ app.post("/register", (req, res) => {
         });
         await newUser.save();
 
-        const token = jwtGenerator(newUser.username)
-
-        res.json({token})
+        res.send('New User Created')
       }
     });
 });
@@ -197,14 +195,7 @@ app.post("/send_mail", cors(), async (req, res) => {
       })
     }
 
-    // let mailList = []
-    // for(let i = 0; i< req.body.emails.length; i++){
-    //   mailList.push(req.body.emails[i].email)
-    //   console.log(mailList)
-    // }
-
     let mailList = req.body.emails
-    console.log(mailList)
 
     const msg ={
       to: mailList,
@@ -221,19 +212,6 @@ app.post("/send_mail", cors(), async (req, res) => {
       console.log(error)
     })
 
-    // const transport = nodemailer.createTransport(sendgridTransport({
-    //   auth: {
-    //     api_key: SENDGRID_API_KEY
-    //   }
-    // }))
-
-    // await transport.sendMail({
-    //   from: process.env.MAIL_FROM,
-    //   to: mailList,
-    //   subject: 'Little Legumes Demo',
-    //   attachments: attachmentsArray,
-    //   html: `${emailObject}`
-    // })
   } catch (err) {
       console.error(err)
   }
@@ -267,6 +245,7 @@ app.get("/photos", (req, res) => {
 })
 
 app.get("/familymembers", (req, res) => {
+  console.log(req.user)
     FamilyMember.find({connectedUser: req.user.username}, (err, family) => {
         if(err) throw err
         if(family) res.send({

@@ -338,6 +338,7 @@ table {
   height: 100vh;
   background-color: var(--white-color);
   overflow: hidden;
+  margin-top: 3.5rem;
 }
 
 .registration-img {
