@@ -22,12 +22,19 @@ export default function AddFAndFForm({toggle}){
   let url = apiConfig.url.API_URL
 
   useEffect(() => {
-    const loggedInUser = localStorage.getItem("user");
-    if (loggedInUser) {
-      const foundUser = JSON.parse(loggedInUser);
-      setConnectedUser(foundUser.username);
-    }
-  }, []);
+    getUser()
+  },[]);
+
+  const getUser = () => {
+    axios({
+      method: "GET",
+      withCredentials: true,
+      url: `${url}/user`,
+      headers: { jwt_token: localStorage.token }
+    }).then((res) => {
+      setConnectedUser(res.data.username)
+    });
+  };
 
   const addFamilyMember = () => {
       axios({

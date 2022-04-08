@@ -212,6 +212,7 @@ export default function Calendar(){
         setIsEmailPrep = { setIsEmailPrep }
         daysToEmail = { daysToEmail }
         setDaysToEmail = { setDaysToEmail }
+        isThisDemo = { isThisDemo }
       />  
     <InfiniteScroll
       dataLength={months.length}

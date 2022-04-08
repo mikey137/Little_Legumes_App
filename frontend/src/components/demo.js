@@ -69,6 +69,7 @@ export default function DemoCalendar(){
   const [daysToEmail, setDaysToEmail] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [userPhotos, setUserPhotos] = useState(demoPhotoArray)
+  const isThisDemo = true
 
   const mapPhotosToDates = () => {
     console.log("running")
@@ -159,6 +160,7 @@ export default function DemoCalendar(){
         setMomentsSubArray = { setMomentsSubArray }
         dateId = { dateId }
         setDateId = { setDateId }
+        isThisDemo = { isThisDemo }
       />
       <div className="scroll-container">
         <EmailFab 
@@ -166,6 +168,7 @@ export default function DemoCalendar(){
           setIsEmailPrep = { setIsEmailPrep }
           daysToEmail = { daysToEmail }
           setDaysToEmail = { setDaysToEmail }
+          isThisDemo = { isThisDemo }
         />  
         <InfiniteScroll
           dataLength={months.length}

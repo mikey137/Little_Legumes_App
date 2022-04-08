@@ -204,6 +204,7 @@ app.post("/send_mail", cors(), async (req, res) => {
     // }
 
     let mailList = req.body.emails
+    console.log(mailList)
 
     const msg ={
       to: mailList,

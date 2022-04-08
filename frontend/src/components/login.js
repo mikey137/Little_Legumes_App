@@ -11,7 +11,6 @@ import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import Link from '@mui/material/Link';
 import axios from 'axios'
-import { Navigate } from 'react-router-dom'
 import { apiConfig } from '../Constants';
 
 export default function Login({ setLoginStatus }){

@@ -23,7 +23,7 @@ function App() {
 
   useEffect(() => {
     checkAuthenticated()
-  },[])
+  },[isLoggedIn])
 
   const checkAuthenticated = async () => {
     try {
@@ -33,7 +33,6 @@ function App() {
       });
 
       const parseRes = await res.data;
-      console.log(res)
 
       parseRes === true ? setIsLoggedIn(true) : setIsLoggedIn(false);
     } catch (err) {
@@ -74,7 +73,8 @@ function App() {
           />
           <Route 
             path="/family" 
-            element={isLoggedIn ? <ViewFamily /> : <Navigate to="/login" />} />
+            element={<ViewFamily />} 
+          />
         </Routes>
       </BrowserRouter> 
     </ThemeProvider> 

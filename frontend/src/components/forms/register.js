@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import axios from 'axios'
-import { Navigate } from 'react-router-dom'
 import { apiConfig } from '../../Constants';
 
 export default function Register({ setLoginStatus }){

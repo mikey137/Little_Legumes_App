@@ -11,8 +11,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
-import { colorTheme } from '../ThemeContext';
-import { ThemeProvider } from '@mui/material/styles';
 import axios from 'axios'
 import { apiConfig } from '../Constants';
 import AddFAndFForm from './forms/addfriendsandfamily';
@@ -84,8 +82,7 @@ export default function ViewFamily() {
     }
 
     const drawerContent = (anchor) => (
-        <ThemeProvider theme={colorTheme} >
-            <Box
+        <Box
             sx={{ 
                 width: '100vw', 
                 height: '80vh',
@@ -94,16 +91,15 @@ export default function ViewFamily() {
                 alignItems: 'center'
             }}
             role="presentation"
+        >
+            <IconButton 
+                sx={{mr: '90vw'}}
+                onClick={handleCloseDraw}
             >
-                <IconButton 
-                    sx={{mr: '90vw'}}
-                    onClick={handleCloseDraw}
-                >
-                    <CloseIcon />
-                </IconButton>
-                {isEdit ? <EditFamilyForm member= {familyMemberToEdit} /> : <AddFAndFForm toggle= {handleCloseDraw}/>}   
-            </Box>
-        </ThemeProvider>
+                <CloseIcon />
+            </IconButton>
+            {isEdit ? <EditFamilyForm member= {familyMemberToEdit} /> : <AddFAndFForm toggle= {handleCloseDraw}/>}   
+        </Box>
     )
 
   return (
