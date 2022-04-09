@@ -61,12 +61,12 @@ function App() {
           <Route 
             path="/login"   
             element=
-              {isLoggedIn === false ? <Login setLoginStatus = { setLoginStatus } /> : <Navigate to = "/calendar" />} 
+              {isLoggedIn !== true ? <Login setLoginStatus = { setLoginStatus } /> : <Navigate to = "/calendar" />} 
           />
           <Route 
             path="/Register" 
             element=
-              {!isLoggedIn === false ? <Register setLoginStatus = { setLoginStatus }/> : <Navigate to = "/calendar" />} 
+              {isLoggedIn !== true ? <Register setLoginStatus = { setLoginStatus }/> : <Navigate to = "/calendar" />} 
           />
           <Route 
             path="/demo" 
