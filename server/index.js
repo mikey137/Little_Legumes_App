@@ -79,7 +79,11 @@ app.get('/logout', function(req, res){
 
 app.post('/verifylogin', authorize, (req, res) => {
   try {
-    res.json(true)
+    if(req.user){
+      res.json(true)
+    }else{
+      res.json(false)
+    }
   } catch (err) {
     console.error(err.message)
     res.status(500).send("Server error")
@@ -119,21 +123,21 @@ app.post("/register", (req, res) => {
 });
 
 app.post("/addFamilyMember", (req, res) => {
-    FamilyMember.findOne({ email: req.body.email }, async (err, doc) => {
-        if(err) throw err
-        if(doc) res.send("Family Member Already Exists")
-        if(!doc) {
-            const newFamilyMember = new FamilyMember({
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                relationship: req.body.relationship,
-                email: req.body.email,
-                connectedUser: req.body.connectedUser
-            })
-            await newFamilyMember.save()
-            res.send("New Family Member Added")
-        }
-    })
+  FamilyMember.findOne({ email: req.body.email}, async (err, doc) => {
+      if(err) throw err
+      if(doc) res.send("Family Member Already Exists")
+      if(doc === null) {
+          const newFamilyMember = new FamilyMember({
+              firstName: req.body.firstName,
+              lastName: req.body.lastName,
+              relationship: req.body.relationship,
+              email: req.body.email,
+              connectedUser: req.body.connectedUser
+          })
+          await newFamilyMember.save()
+          res.send("New Family Member Added")
+      }
+  })
 })
 
 app.post("/addphoto", (req, res) => {

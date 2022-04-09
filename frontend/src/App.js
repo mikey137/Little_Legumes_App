@@ -17,7 +17,7 @@ import './App.css'
 
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState("")
 
   let url = apiConfig.url.API_URL
 
@@ -26,17 +26,22 @@ function App() {
   },[isLoggedIn])
 
   const checkAuthenticated = async () => {
-    try {
-      const res = await axios(`${url}/verifylogin`, {
-        method: "POST",
-        headers: { jwt_token: localStorage.token }
-      });
-
-      const parseRes = await res.data;
-
-      parseRes === true ? setIsLoggedIn(true) : setIsLoggedIn(false);
-    } catch (err) {
-      console.error(err.message);
+    let token = localStorage.token
+    if(token){
+      try {
+        const res = await axios(`${url}/verifylogin`, {
+          method: "POST",
+          headers: { jwt_token: localStorage.token }
+        });
+        console.log(res)
+        const parseRes = await res.data;
+        
+        parseRes === true ? setIsLoggedIn(true) : setIsLoggedIn(false);
+      } catch (err) {
+        console.error(err.message);
+      }
+    }else{
+      setIsLoggedIn(false)
     }
   };
 
@@ -56,12 +61,12 @@ function App() {
           <Route 
             path="/login"   
             element=
-              {!isLoggedIn ? <Login setLoginStatus = { setLoginStatus } /> : <Navigate to = "/calendar" />} 
+              {isLoggedIn === false ? <Login setLoginStatus = { setLoginStatus } /> : <Navigate to = "/calendar" />} 
           />
           <Route 
             path="/Register" 
             element=
-              {!isLoggedIn ? <Register setLoginStatus = { setLoginStatus }/> : <Navigate to = "/calendar" />} 
+              {!isLoggedIn === false ? <Register setLoginStatus = { setLoginStatus }/> : <Navigate to = "/calendar" />} 
           />
           <Route 
             path="/demo" 
@@ -69,11 +74,11 @@ function App() {
           />
           <Route 
             path="/calendar"  
-            element={isLoggedIn ? <Calendar /> : <Navigate to="/login" />} 
+            element={isLoggedIn !== false ? <Calendar /> : <Navigate to="/login" />} 
           />
           <Route 
             path="/family" 
-            element={<ViewFamily />} 
+            element={isLoggedIn !== false ? <ViewFamily /> : <Navigate to="/login" />} 
           />
         </Routes>
       </BrowserRouter> 

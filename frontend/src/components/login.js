@@ -1,4 +1,5 @@
 import React,{useState} from 'react'
+import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import FilledInput from '@mui/material/FilledInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -21,6 +22,7 @@ export default function Login({ setLoginStatus }){
     password: '',
     showPassword: false,
   });
+  const navigate = useNavigate()
 
   let url = apiConfig.url.API_URL
   
@@ -61,6 +63,8 @@ export default function Login({ setLoginStatus }){
       if(token){
         localStorage.setItem("token", token)
         setLoginStatus(true)
+        navigate('/calendar')
+
       }
     } catch (err) {
       console.log(err.message)
