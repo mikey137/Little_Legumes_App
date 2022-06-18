@@ -6,7 +6,7 @@ export default function Landing(){
             <div className="landing-background"></div>
             <div className="landing-overlay"></div>
             <div className="landing-text">
-                Share and track all your kids precious moments!
+                Share and track all your kids' precious moments!
             </div>
             <div className="landing-btn-container">
                 <a href="/demo"><h2>VIEW DEMO</h2></a> 
